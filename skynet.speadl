@@ -1,0 +1,15 @@
+import interfaces.IEchequier
+import interfaces.ITerminator
+
+namespace skynet {
+	component Terminator{
+		provides run:ITerminator
+	}
+	
+	component Map {
+		provides getMap:IEchequier
+		requires run:ITerminator
+	}
+}
+
+
