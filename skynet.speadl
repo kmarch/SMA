@@ -10,13 +10,13 @@ namespace skynet {
 	
 	component Map {
 		provides getMap:IEchequier
-		provides initMap:IInitialisation
+		provides initMap:IEchequier
 		requires run:ITerminator
 	}
 	
 	component Systeme {
 		provides getMap:IEchequier = getMap
-		provides mapInit:IInitialisation = init.initMap
+		provides mapInit:IEchequier = init.initMap
 		part init:Map{
 			bind run to terminator.run
 		}
@@ -29,7 +29,7 @@ namespace skynet {
 	}
 	
 	component Global {
-		provides initalisation:IInitialisation=initialisation.mapInit
+		provides initalisation:IEchequier=initialisation.mapInit
 		part initialisation:Systeme
 		provides lancementIHM:IIHM = ihm.affichage
 		part ihm:IHM{
