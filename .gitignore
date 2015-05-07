@@ -37,3 +37,5 @@ ehthumbs.db
 Thumbs.db
 /bin/
 /speadl-gen/
+.project
+.settings/org.eclipse.jdt.core.prefs
