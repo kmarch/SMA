@@ -9,14 +9,13 @@ namespace skynet {
 	}
 	
 	component Map {
-		provides getMap:IEchequier
-		provides initMap:IEchequier
+		provides gestionMap:IEchequier
 		requires run:ITerminator
 	}
 	
 	component Systeme {
 		provides getMap:IEchequier = getMap
-		provides mapInit:IEchequier = init.initMap
+		provides mapInit:IEchequier = init.gestionMap
 		part init:Map{
 			bind run to terminator.run
 		}
