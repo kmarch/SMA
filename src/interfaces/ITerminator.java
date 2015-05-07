@@ -1,10 +1,13 @@
 package interfaces;
 
-import impl.Pion;
+import impl.TerminatorImpl;
 
 import java.util.ArrayList;
 
-public interface ITerminator {
+import enumeration.Couleur;
 
-	public void run(ArrayList<ArrayList<Pion>> listePion);
+public interface ITerminator extends Element{
+
+	public void run();
+	public ITerminator intialisation(Couleur couleur, int x, int y, ArrayList<ArrayList<TerminatorImpl>> listePion);
 }

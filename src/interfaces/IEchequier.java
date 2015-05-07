@@ -1,10 +1,12 @@
 package interfaces;
 
-import impl.Pion;
+import impl.TerminatorImpl;
 
 import java.util.ArrayList;
 
 public interface IEchequier {
 
-	public ArrayList<ArrayList<Pion>> getMap();
+	public ArrayList<ArrayList<TerminatorImpl>> getMap();
+	public void initialisation();
+
 }
