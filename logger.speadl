@@ -1,0 +1,13 @@
+import tutorial2.logging.interfaces.ILog
+
+namespace tutorial2.logging {
+
+    ecosystem Logging {        
+        provides create: ICreateLogger
+
+        species Logger(name: String) {
+            provides log: ILog
+        }
+    }
+
+}

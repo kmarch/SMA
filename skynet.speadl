@@ -2,40 +2,38 @@ import interfaces.IEchequier
 import interfaces.IIHM
 import interfaces.ITerminator
 import interfaces.IInitialisation
+import enumeration.Couleur
 
 namespace skynet {
-	component Terminator{
-		provides run:ITerminator
-	}
 	
-	component Map {
-		provides gestionMap:IEchequier
-		requires run:ITerminator
-	}
-	
-	component Systeme {
-		provides getMap:IEchequier = getMap
-		provides mapInit:IEchequier = init.gestionMap
-		part init:Map{
-			bind run to terminator.run
+	ecosystem Army {
+		
+		provides manage: IArmyManage
+		provides elog: ILog
+		
+		part l: Logging
+		
+		part a : arming {
+			bind elog to elog
+		} 
+		
+		part gui: ArmyIHM {
+            bind manage to manage
+        }
+		
+		species ArmyTerminator(color: Couleur){
+			use ll: l.Logger(color: Couleur)
+			use at : a.Terminator(color: Couleur) {
+				bind log to ll.log
+			}
+			use gt: gui.TerminatorIHM {
+				bind position to at.position
+				bind color to at.color
+				bind 
+			}
 		}
-		part terminator :Terminator 
 	}
-	
-	component IHM {
-		provides affichage : IIHM
-		requires map:IEchequier
-	}
-	
-	component Global {
-		provides initalisation:IEchequier=initialisation.mapInit
-		part initialisation:Systeme
-		provides lancementIHM:IIHM = ihm.affichage
-		part ihm:IHM{
-			bind map to systeme.getMap
-		}
-		part systeme:Systeme
-	}
+
 }
 
 
