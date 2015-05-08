@@ -1,16 +1,15 @@
 import interfaces.IEchequier
 import interfaces.IIHM
 import interfaces.ITerminator
-import interfaces.IInitialisation
 
 namespace skynet {
 	component Terminator{
-		provides run:ITerminator
+		provides manage:ITerminator
 	}
 	
 	component Systeme {
 		provides gestMap:IEchequier
-		requires run:ITerminator
+		requires manage:ITerminator
 	}
 	
 	component IHM {
@@ -21,13 +20,13 @@ namespace skynet {
 	component Global {
 		provides initalisation:IEchequier=systeme.gestMap
 		part systeme:Systeme{
-			bind run to terminator.run
+			bind manage to terminator.manage
 		}
 		part terminator:Terminator
-		provides lancementIHM:IIHM = ihm.affichage
-		part ihm:IHM{
-			bind map to systeme.gestMap
-		}
+//		provides lancementIHM:IIHM = ihm.affichage
+//		part ihm:IHM{
+//			bind map to systeme.gestMap
+//		}
 	}
 }
 

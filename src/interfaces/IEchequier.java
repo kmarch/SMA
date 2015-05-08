@@ -1,12 +1,11 @@
 package interfaces;
 
-import impl.TerminatorImpl;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public interface IEchequier {
 
-	public ArrayList<ArrayList<TerminatorImpl>> getMap();
+	public List<ArrayList<Element>> getMap();
 	public void initialisation();
 
 }
