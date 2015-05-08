@@ -48,7 +48,6 @@ public class SystemImpl extends Systeme {
 				Element nid;
 				String listeRobots = properties.getProperty("nids");
 				String[] nids = listeRobots.split("[,]");
-				System.out.println("ici " + nids.length);
 				for (int i = 0; i < nids.length; i += 3) {
 					nid = new NidImpl(getCouleur(nids[i+2]));
 					liste.get(getInt(nids[i])).set(getInt(nids[i + 1]),
