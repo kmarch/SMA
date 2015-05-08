@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 import skynet.Systeme;
 import enumeration.Couleur;
@@ -42,6 +43,35 @@ public class SystemImpl extends Systeme {
 				initRobots(properties, taille);
 				
 				initNids(properties);
+				
+				generationBoites(taille);
+			}
+
+			private void generationBoites(int taille) {
+				int boiteX = 0, boiteY = 0;
+				Couleur nouvelleCouleur;
+				Couleur [] tabCouleur = {Couleur.BLEU, Couleur.ROUGE, Couleur.VERT};
+				Random rand = new Random();
+				boolean caseVide = false;
+				do {
+					
+					nouvelleCouleur = tabCouleur[rand.nextInt(3)];
+					caseVide = false;
+					while(!caseVide) {
+						boiteX = rand.nextInt(taille);
+						boiteY = rand.nextInt(taille);
+						if (liste.get(boiteX).get(boiteY) == null) {
+							caseVide = true;
+						}
+					}
+					System.out.println("Ajout d'une boite au coord " + boiteX + " " + boiteY);
+					liste.get(boiteX).set(boiteY, new BoiteImpl(nouvelleCouleur));
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				} while(true);
 			}
 
 			private void initNids(Properties properties) {
