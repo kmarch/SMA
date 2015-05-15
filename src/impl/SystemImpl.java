@@ -49,6 +49,7 @@ public class SystemImpl extends Systeme {
 
 			private void generationBoites(int taille) {
 				int boiteX = 0, boiteY = 0;
+				int nbBoite = 0;
 				Couleur nouvelleCouleur;
 				Couleur [] tabCouleur = {Couleur.BLEU, Couleur.ROUGE, Couleur.VERT};
 				Random rand = new Random();
@@ -64,14 +65,17 @@ public class SystemImpl extends Systeme {
 							caseVide = true;
 						}
 					}
-					System.out.println("Ajout d'une boite au coord " + boiteX + " " + boiteY);
-					liste.get(boiteX).set(boiteY, new BoiteImpl(nouvelleCouleur));
+					System.out.println("Ajout d'une boite au coord " + boiteX + " " + boiteY + " " + Couleur.ROUGE);
+					liste.get(boiteX).set(boiteY, new BoiteImpl(Couleur.ROUGE,boiteX,boiteY));
+					/*
 					try {
 						Thread.sleep(5000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-				} while(true);
+					*/
+					nbBoite++;
+				} while(nbBoite<1);
 			}
 
 			private void initNids(Properties properties) {
@@ -79,7 +83,7 @@ public class SystemImpl extends Systeme {
 				String listeRobots = properties.getProperty("nids");
 				String[] nids = listeRobots.split("[,]");
 				for (int i = 0; i < nids.length; i += 3) {
-					nid = new NidImpl(getCouleur(nids[i+2]));
+					nid = new NidImpl(getCouleur(nids[i+2]),getInt(nids[i]),getInt(nids[i+1]));
 					liste.get(getInt(nids[i])).set(getInt(nids[i + 1]),
 							nid);
 				}
@@ -100,7 +104,7 @@ public class SystemImpl extends Systeme {
 				for (int i = 0; i < robots.length; i += 3) {
 					t800 = requires().manage().fabrique(
 							getCouleur(robots[i + 2]), getInt(robots[i]),
-							getInt(robots[i + 1]), liste);
+							getInt(robots[i + 1]), liste, 100);
 					liste.get(getInt(robots[i])).set(getInt(robots[i + 1]),
 							t800);
 					t800.run();
