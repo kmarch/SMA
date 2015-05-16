@@ -20,7 +20,7 @@ public class LoggerImpl extends Logger{
 				try {
 		            File lFile = new File(numRobot + ".log");
 		            FileWriter lWriter = new FileWriter(lFile, true);
-		            lWriter.write("Deplacement vers " + x + ", " + y);
+		            lWriter.write("Deplacement vers " + x + ", " + y + "\n");
 		            lWriter.close();
 		        } catch (IOException lEx) {
 		            lEx.printStackTrace();
