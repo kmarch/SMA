@@ -1,6 +1,7 @@
 package impl;
 
 import interfaces.Element;
+import interfaces.ILogger;
 import interfaces.ITerminator;
 import interfaces.IEchequier;
 
@@ -18,11 +19,13 @@ public class TerminatorImpl extends Terminator {
 	protected ITerminator make_manage() {
 		return new ITerminator() {
 
+			private int num;
 			private int x;
 			private int y;
 			private Couleur couleur;
 			private int batterie;
 			private List<ArrayList<Element>> liste;
+			private ILogger logger;
 			
 			@Override
 			public void run() {
@@ -69,21 +72,22 @@ public class TerminatorImpl extends Terminator {
 			}
 			
 			@Override
-			public ITerminator intialisation(Couleur couleur, int x, int y,
+			public ITerminator intialisation(ILogger logger, int num, Couleur couleur, int x, int y,
 					List<ArrayList<Element>> listePion, int batterie) {
+				this.num = num;
 				this.couleur = couleur;
 				this.x = x;
 				this.y = y;
 				this.liste = listePion;
 				this.batterie = batterie;
+				this.logger = logger;
 				return this;
 			}
 
 			@Override
-			public ITerminator fabrique(Couleur couleur, int i, int j, List<ArrayList<Element>> liste, int batterie){
-				
+			public ITerminator fabrique(ILogger logger, int num, Couleur couleur, int i, int j, List<ArrayList<Element>> liste, int batterie){
 				Terminator.Component systeme = (new  TerminatorImpl()).newComponent();
-				return systeme.manage().intialisation(couleur, i, j, liste, batterie);
+				return systeme.manage().intialisation(logger, num, couleur, i, j, liste, batterie);
 
 			}
 
@@ -305,6 +309,7 @@ public class TerminatorImpl extends Terminator {
 						batterie = batterie - 5;
 					}
 				}
+				logger.logDeplacement(num, x, y);
 			}
 
 			@Override

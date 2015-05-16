@@ -1,8 +1,14 @@
 import interfaces.IEchequier
 import interfaces.IIHM
 import interfaces.ITerminator
+import interfaces.ILogger
 
 namespace skynet {
+	
+	component Logger {
+		provides log:ILogger	
+	}
+	
 	component Terminator{
 		provides manage:ITerminator
 	}
@@ -10,6 +16,7 @@ namespace skynet {
 	component Systeme {
 		provides gestMap:IEchequier
 		requires manage:ITerminator
+		requires logger:ILogger
 	}
 	
 	component IHM {
@@ -21,8 +28,11 @@ namespace skynet {
 		provides initalisation:IEchequier=systeme.gestMap
 		part systeme:Systeme{
 			bind manage to terminator.manage
+			bind logger to logService.log
 		}
+		
 		part terminator:Terminator
+		part logService:Logger
 //		provides lancementIHM:IIHM = ihm.affichage
 //		part ihm:IHM{
 //			bind map to systeme.gestMap

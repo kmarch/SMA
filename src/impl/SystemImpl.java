@@ -97,12 +97,13 @@ public class SystemImpl extends Systeme {
 					for(int j = 0; j < taille; j++) {
 						liste.get(i).add(null);
 					}
+					
 				}
 				liste = Collections.synchronizedList(liste);
 				String listeRobots = properties.getProperty("robots");
 				String[] robots = listeRobots.split("[,]");
-				for (int i = 0; i < robots.length; i += 3) {
-					t800 = requires().manage().fabrique(
+				for (int i = 0, nbRobots = 0; i < robots.length; i += 3, nbRobots++) {
+					t800 = requires().manage().fabrique(requires().logger(), nbRobots,
 							getCouleur(robots[i + 2]), getInt(robots[i]),
 							getInt(robots[i + 1]), liste, 100);
 					liste.get(getInt(robots[i])).set(getInt(robots[i + 1]),
