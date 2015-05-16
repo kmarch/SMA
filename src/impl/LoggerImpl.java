@@ -44,7 +44,8 @@ public class LoggerImpl extends Logger{
 				try {
 		            File lFile = new File(numRobot + ".log");
 		            FileWriter lWriter = new FileWriter(lFile, true);
-		            lWriter.write("Pose de la boite de couleur "  + boite.getCouleur().toString());
+		            lWriter.write("Pose de la boite de couleur "  + boite.getCouleur().toString() + 
+		            		" dans le nid " + nid.getCouleur().toString());
 		            lWriter.close();
 		        } catch (IOException lEx) {
 		            lEx.printStackTrace();
