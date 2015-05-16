@@ -33,40 +33,46 @@ public class TerminatorImpl extends Terminator {
 			}
 
 			public void execution() {
-				
+				do{
 				Element boitePlusProche = boitePlusProche(listeBoite(liste));
-				System.out.println("boitePlusProche = " + boitePlusProche.getX() + " " + boitePlusProche.getY());
-				int distance = distance(boitePlusProche);
-				System.out.println("distance = " + distance);
-				//On considére que le cout de déplacement d'une case est de 5
-				//On regarde ici que la batterie est suffisante pour ramener la boite
-				if(getBatterie() > 5*distance){
-					//tant que on a pas atteint les coordonnées de la boite
-					while(boitePlusProche.getX() != getX() && boitePlusProche.getY() != getY()){
-						Element boitePlusProcheAvantDeplacement = boitePlusProche(listeBoite(liste));
-						//On regarde que la boite la plus proche est toujours la même
-						if(boitePlusProche.equals(boitePlusProcheAvantDeplacement)){
-							deplacement(boitePlusProche, liste);
-							System.out.println(getX() + " " + getY());
-							try {
-								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+				if(boitePlusProche != null){
+					System.out.println("boitePlusProche = " + boitePlusProche.getX() + " " + boitePlusProche.getY());
+					int distance = distance(boitePlusProche);
+					System.out.println("distance = " + distance);
+					//On considére que le cout de déplacement d'une case est de 5
+					//On regarde ici que la batterie est suffisante pour ramener la boite
+					if(getBatterie() > 5*distance){
+						//tant que on a pas atteint les coordonnées de la boite
+						while((boitePlusProche.getX() != getX()) || (boitePlusProche.getY() != getY())){
+							Element boitePlusProcheAvantDeplacement = boitePlusProche(listeBoite(liste));
+							//On regarde que la boite la plus proche est toujours la même
+							if(boitePlusProche.equals(boitePlusProcheAvantDeplacement)){
+								deplacement(boitePlusProche, liste);
+								System.out.println("batterie = " + getBatterie());
+								try {
+									Thread.sleep(1000);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+							//gérer la cas ou la boite n'est plus là
+							else{
+						
 							}
 						}
-						//gérer la cas ou la boite n'est plus là
-						else{
-							
+						//On a atteint la boite il faut la ramener au nid correspondant
+						Element rameneAuNid = nidCorrespondant(listeNids(liste));
+						while((rameneAuNid.getX() != getX()) && (rameneAuNid.getY() != getY())){
+								deplacement(rameneAuNid, liste);	
 						}
+						setBatterie(100);
 					}
-					//On a atteint la boite il faut la ramener au nid correspondant
-					Element rameneAuNid = nidCorrespondant(listeNids(liste));
-					while(rameneAuNid.getX() != getX() && rameneAuNid.getY() != getY()){
-							deplacement(rameneAuNid, liste);	
+					else{
+						System.out.println("Pas assez de batterie");
 					}
-					setBatterie(100);
 				}
+				}while(true);
 				
 				
 			}
@@ -128,9 +134,10 @@ public class TerminatorImpl extends Terminator {
 			//Retourne la boite la plus proche ayant la même couleur que le robot
 			@Override
 			public Element boitePlusProche(ArrayList<Element> boite) {
+				System.out.println("Taille de la liste de boite : " + boite.size());
 				int distance = 100;
 				int dist;
-				Element plusProche = new BoiteImpl(null, 0, 0);
+				Element plusProche = null;
 				for(Element elem : boite){
 					if(getCouleur().equals(elem.getCouleur())){
 						int x = getX() - elem.getX();
@@ -147,7 +154,7 @@ public class TerminatorImpl extends Terminator {
 			
 			//Retoune la distance entre la boite la plus proche et le nid ayant la même couleur
 			public Element nidCorrespondant(ArrayList<Element> nids){
-				Element nidCorrespondant = new NidImpl(null, 0, 0);
+				Element nidCorrespondant = null;
 				for(Element nid : nids){
 					if(nid.getCouleur().equals(getCouleur())){
 						nidCorrespondant = nid;	
@@ -185,7 +192,10 @@ public class TerminatorImpl extends Terminator {
 			//Deplace le robot
 			public void deplacement(Element boite,List<ArrayList<Element>> liste){
 				//boite en bas à droite par rapport au robot
-				if(boite.getX() > getX() && boite.getY() > getY()){
+				System.out.println("boite.getX() : " + boite.getX() + " boite.getY() : " + boite.getY()
+						+ " getX() : " + getX() + " getY() : " + getY());
+				if((boite.getX() > getX()) && (boite.getY() > getY())){
+					System.out.println("Bas droite");
 					//deplace vers la droite
 					if(liste.get(getX() +1).get(getY()) == null){
 						Element e = liste.get(getX()).get(getY());
@@ -205,7 +215,8 @@ public class TerminatorImpl extends Terminator {
 				}
 				
 				//boite en haut à droite par rapport au robot
-				else if(boite.getX() > getX() && boite.getY() < getY()){
+				else if((boite.getX() > getX()) && (boite.getY() < getY())){
+					System.out.println("haut droite");
 					//deplace vers la droite
 					if(liste.get(getX() +1).get(getY()) == null){
 						Element e = liste.get(getX()).get(getY());
@@ -225,7 +236,8 @@ public class TerminatorImpl extends Terminator {
 				}
 				
 				//boite en bas à gauche par rapport au robot
-				else if(boite.getX() < getX() && boite.getY() > getY()){
+				else if((boite.getX() < getX()) && (boite.getY() > getY())){
+					System.out.println("Bas gauche");
 					//deplace vers la gauche
 					if(liste.get(getX() -1).get(getY()) == null){
 						Element e = liste.get(getX()).get(getY());
@@ -245,7 +257,8 @@ public class TerminatorImpl extends Terminator {
 				}
 				
 				//boite en haut à gauche par rapport au robot
-				else if(boite.getX() < getX() && boite.getY() > getY()){
+				else if((boite.getX() < getX()) && (boite.getY() < getY())){
+					System.out.println("Haut gauche");
 					//deplace vers la gauche
 					if(liste.get(getX() -1).get(getY()) == null){
 						Element e = liste.get(getX()).get(getY());
@@ -255,17 +268,17 @@ public class TerminatorImpl extends Terminator {
 						batterie = batterie - 5;
 					}
 					//deplace vers le haut
-					else if(liste.get(getX()).get(getY() +1) == null){
+					else if(liste.get(getX()).get(getY() -1) == null){
 						Element e = liste.get(getX()).get(getY());
-						liste.get(getX()).set(getY() +1,e);
+						liste.get(getX()).set(getY() -1,e);
 						liste.get(getX()).set(getY(),null); 
-						y++;
+						y--;
 						batterie = batterie - 5;
 					}
 				}
-				
 				//boite en dessous
-				else if(boite.getX() == getX() && boite.getY() > getY()){
+				else if((boite.getX() == getX()) && (boite.getY() > getY())){
+					System.out.println("dessous");
 					if(liste.get(getX()).get(getY() +1) == null){
 						Element e = liste.get(getX()).get(getY());
 						liste.get(getX()).set(getY() +1,e);
@@ -276,7 +289,8 @@ public class TerminatorImpl extends Terminator {
 				}
 				
 				//boite en dessus
-				else if(boite.getX() == getX() && boite.getY() < getY()){
+				else if((boite.getX() == getX()) && (boite.getY() < getY())){
+					System.out.println("dessus");
 					if(liste.get(getX()).get(getY() -1) == null){
 						Element e = liste.get(getX()).get(getY());
 						liste.get(getX()).set(getY() -1,e);
@@ -287,20 +301,22 @@ public class TerminatorImpl extends Terminator {
 				}
 				
 				//boite à gauche
-				else if(boite.getX() < getX() && boite.getY() == getY()){
+				else if((boite.getX() < getX()) && (boite.getY() == getY())){
 					//deplace vers la gauche
+					System.out.println("gauche");
 					if(liste.get(getX() -1).get(getY()) == null){
 						Element e = liste.get(getX()).get(getY());
 						liste.get(getX()-1).set(getY(),e);
-						liste.get(getX()).set(getY(),null); 
+						liste.get(getX()).set(getY(),null);
 						x--;
 						batterie = batterie - 5;
 					}
 				}
 				
 				//boite à droite
-				else if(boite.getX() < getX() && boite.getY() == getY()){
-					//deplace vers la gauche
+				else if((boite.getX() > getX()) && (boite.getY() == getY())){
+					//deplace vers la droite
+					System.out.println("droite");
 					if(liste.get(getX() +1).get(getY()) == null){
 						Element e = liste.get(getX()).get(getY());
 						liste.get(getX()+1).set(getY(),e);
