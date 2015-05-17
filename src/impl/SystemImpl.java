@@ -49,7 +49,6 @@ public class SystemImpl extends Systeme {
 
 			private void generationBoites(int taille) {
 				int boiteX = 0, boiteY = 0;
-				int nbBoite = 0;
 				Couleur nouvelleCouleur;
 				Couleur [] tabCouleur = {Couleur.BLEU, Couleur.ROUGE, Couleur.VERT};
 				Random rand = new Random();
@@ -65,17 +64,14 @@ public class SystemImpl extends Systeme {
 							caseVide = true;
 						}
 					}
-					System.out.println("Ajout d'une boite au coord " + boiteX + " " + boiteY + " " + Couleur.ROUGE);
-					liste.get(boiteX).set(boiteY, new BoiteImpl(Couleur.ROUGE,boiteX,boiteY));
-					/*
+					System.out.println("Ajout d'une boite au coord " + boiteX + " " + boiteY + " " + nouvelleCouleur);
+					liste.get(boiteX).set(boiteY, new BoiteImpl(nouvelleCouleur,boiteX,boiteY));
 					try {
 						Thread.sleep(5000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					*/
-					nbBoite++;
-				} while(nbBoite<1);
+				} while(true);
 			}
 
 			private void initNids(Properties properties) {
