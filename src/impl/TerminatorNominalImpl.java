@@ -13,7 +13,7 @@ import skynet.Terminator;
 import enumeration.Couleur;
 
 
-public class TerminatorImpl extends Terminator {
+public class TerminatorNominalImpl extends Terminator {
 
 	@Override
 	protected ITerminator make_manage() {
@@ -104,7 +104,7 @@ public class TerminatorImpl extends Terminator {
 
 			@Override
 			public ITerminator fabrique(ILogger logger, int num, Couleur couleur, int i, int j, List<ArrayList<Element>> liste, int batterie){
-				Terminator.Component systeme = (new  TerminatorImpl()).newComponent();
+				Terminator.Component systeme = (new  TerminatorNominalImpl()).newComponent();
 				return systeme.manage().intialisation(logger, num, couleur, i, j, liste, batterie);
 
 			}
