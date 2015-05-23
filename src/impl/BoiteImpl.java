@@ -8,6 +8,7 @@ public class BoiteImpl implements Element {
 	private Couleur couleur;
 	private int x;
 	private int y;
+	private boolean reservee = false;
 
 	public BoiteImpl(Couleur couleur,int x,int y) {
 		this.couleur = couleur;
@@ -40,5 +41,12 @@ public class BoiteImpl implements Element {
 		return y;
 	}
 
+	public boolean isReserved() {
+		return reservee;
+	}
+	
+	public void reserver() {
+		reservee = true;
+	}
 
 }
