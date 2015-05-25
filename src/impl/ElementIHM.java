@@ -31,6 +31,11 @@ public class ElementIHM extends JPanel {
     	  selectImageBoite(element.getCouleur());
       }else if (element.isNid()) {
           selectBackground(element.getCouleur());
+          try {
+			image = ImageIO.read(new File("cart.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
       } else { //is robot/terminator
           selectImageTerminator(element.getCouleur());
       }
@@ -75,7 +80,9 @@ public class ElementIHM extends JPanel {
 		}
     	try {                
             image = ImageIO.read(file);
-         } catch (IOException ex) {}
+         } catch (IOException e) {
+ 			e.printStackTrace();
+         }
 	}
     
     @Override
