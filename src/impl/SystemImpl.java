@@ -65,7 +65,7 @@ public class SystemImpl extends Systeme {
 						}
 					}
 					System.out.println("Ajout d'une boite au coord " + boiteX + " " + boiteY + " " + nouvelleCouleur);
-					liste.get(boiteX).set(boiteY, new BoiteImpl(nouvelleCouleur,boiteX,boiteY));
+					liste.get(boiteX).set(boiteY, new BoiteImpl(nouvelleCouleur,boiteX,boiteY,false));
 					try {
 						Thread.sleep(5000);
 					} catch (InterruptedException e) {

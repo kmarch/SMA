@@ -142,7 +142,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 				int dist;
 				Element plusProche = null;
 				for(Element elem : boite){
-					if(getCouleur().equals(elem.getCouleur())){
+					if((getCouleur().equals(elem.getCouleur()) && (!((BoiteImpl) elem).isReserved()))){
 						int x = getX() - elem.getX();
 						int y = getY() - elem.getY();
 						dist = (Math.abs(x) + Math.abs(y));
@@ -152,6 +152,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 							}
 						}
 				}
+				((BoiteImpl) plusProche).reserver();
 				return plusProche;
 			}
 			
