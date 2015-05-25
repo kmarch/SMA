@@ -2,5 +2,7 @@ package interfaces;
 
 public interface IIHM {
 
-	public void affichage();
+	public void execution();
+
+	void run();
 }

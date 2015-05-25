@@ -33,10 +33,10 @@ namespace skynet {
 		
 		part terminator:Terminator
 		part logService:Logger
-//		provides lancementIHM:IIHM = ihm.affichage
-//		part ihm:IHM{
-//			bind map to systeme.gestMap
-//		}
+		provides lancementIHM:IIHM = ihm.affichage
+		part ihm:IHM{
+			bind map to systeme.gestMap
+		}
 	}
 }
 

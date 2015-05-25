@@ -23,10 +23,10 @@ public class GlobalNominalImpl extends Global {
 		return new LoggerImpl();
 	}
 
-//	@Override
-//	protected IHM make_ihm() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	@Override
+	protected IHM make_ihm() {
+		IHMImpl ihm = new IHMImpl();
+		return ihm;
+	}
 
 }
