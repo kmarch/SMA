@@ -10,10 +10,11 @@ public class BoiteImpl implements Element {
 	private int y;
 	private boolean reservee = false;
 
-	public BoiteImpl(Couleur couleur,int x,int y) {
+	public BoiteImpl(Couleur couleur,int x,int y,boolean reservee) {
 		this.couleur = couleur;
 		this.x = x;
 		this.y = y;
+		this.reservee = reservee;
 	}
 	
 	@Override
