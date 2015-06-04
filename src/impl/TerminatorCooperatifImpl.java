@@ -37,6 +37,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 					synchronized (liste) {
 						ajoutDeNouveauxTerminator();
 					}
+					System.out.println("la");
 
 					// robot de cette couleur
 					if (boitePlusProche != null) {
@@ -97,10 +98,11 @@ public class TerminatorCooperatifImpl extends Terminator {
 							setBatterie(100);
 						} else {
 							System.out.println("Pas assez de batterie");
+							break;
 						}
 					}
 				} while (true);
-
+				System.out.println("Fin robot");
 			}
 
 			private void ajoutDeNouveauxTerminator() {
@@ -127,8 +129,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 					}
 				}
 				ITerminator t800;
-				System.out.println("ici " + nbBoite[0]);
-				if (nbBoite[0] > (liste.size() * liste.size()) / 3) {
+				if (nbBoite[0] > 3) {
 					if (liste.get(x + 1).get(y) == null) {
 						t800 = fabrique(logger, dernierId, Couleur.BLEU, x + 1, y, liste, maxBatterie);
 						liste.get(x + 1).set(y, t800);
