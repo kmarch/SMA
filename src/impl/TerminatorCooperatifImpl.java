@@ -100,7 +100,8 @@ public class TerminatorCooperatifImpl extends Terminator {
 				// on va regarder s'il faut créer un robot
 				ArrayList<Element> listeBoite = listeBoite();
 				ArrayList<ITerminator> listeRobots = listeRobots();
-				int[] nbBoite = { 0, 0, 0 };
+				int [] nbBoite = { 0, 0, 0 };
+				int [] nbRobots = {0 , 0, 0};
 				int dernierId = 0;
 				for (Element boite : listeBoite) {
 					switch (boite.getCouleur()) {
@@ -118,18 +119,28 @@ public class TerminatorCooperatifImpl extends Terminator {
 					if (robot.getId() > dernierId) {
 						dernierId = robot.getId();
 					}
+					switch (robot.getCouleur()) {
+					case BLEU:
+						nbRobots[0]++;
+						break;
+					case ROUGE:
+						nbRobots[1]++;
+						break;
+					case VERT:
+						nbRobots[2]++;
+					}
 				}
 
 				boolean ok = false;
-				if (nbBoite[0] > (liste.size() * liste.size()) / 20) {
+				if (nbBoite[0] > (liste.size() * liste.size()) / 20 && nbBoite[0] > nbRobots[0] * 2) {
 					dernierId = creationRobotParCouleur(dernierId, ok, Couleur.BLEU);
 				}
 				ok = false;
-				if (nbBoite[1] > (liste.size() * liste.size()) / 20) {
+				if (nbBoite[1] > (liste.size() * liste.size()) / 20 && nbBoite[1] > nbRobots[1] * 2) {
 					dernierId = creationRobotParCouleur(dernierId, ok, Couleur.ROUGE);
 				}
 				ok = false;
-				if (nbBoite[2] > (liste.size() * liste.size()) / 20) {
+				if (nbBoite[2] > (liste.size() * liste.size()) / 20 && nbBoite[2] > nbRobots[2] * 2) {
 					dernierId = creationRobotParCouleur(dernierId, ok, Couleur.VERT);
 				}
 			}
