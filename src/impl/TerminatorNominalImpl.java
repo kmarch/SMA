@@ -35,7 +35,7 @@ public class TerminatorNominalImpl extends Terminator {
 			public void execution() {
 				int etape = 1;
 				do{
-				Element boitePlusProche = boitePlusProche(listeBoite(liste));
+				Element boitePlusProche = boitePlusProche(listeBoite());
 				if(boitePlusProche != null){
 					System.out.println("boitePlusProche = " + boitePlusProche.getX() + " " + boitePlusProche.getY());
 					int distance = distance(boitePlusProche);
@@ -113,7 +113,7 @@ public class TerminatorNominalImpl extends Terminator {
 			}
 
 			//Retourne la liste des boites
-			public ArrayList<Element> listeBoite(List<ArrayList<Element>> liste) {
+			public ArrayList<Element> listeBoite() {
 				ArrayList<Element> listeBoite = new ArrayList<Element>();
 				for(int i=0;i<liste.size();i++){
 					for(int j=0;j<liste.size();j++){
