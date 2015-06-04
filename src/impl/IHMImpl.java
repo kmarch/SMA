@@ -23,7 +23,7 @@ public class IHMImpl extends IHM {
 			public static final int JPANEL_SIZE = 40;
 			private JFrame frame;
 			private int nbRafraichissement;
-
+			
 			@Override
 			public void run() {
 				new ParalleleIHM(this).start();
@@ -37,11 +37,41 @@ public class IHMImpl extends IHM {
 					return;
 				}
 				int size = l.size();
+
+		        Container container = frame.getContentPane();
+		        ElementIHM temp = null;
+		        
+		        for ( int i = 0; i < size; i++ )
+		        {
+		        	for ( int j = 0; j < size; j++ ) {
+		        		temp = (ElementIHM) container.getComponent(i*size+j);
+		        		Element element = l.get(i).get(j);
+		        		if(temp.aChange(element)) {
+			        		if(element==null) {
+			        			temp.configureEmpty(size); 
+			        		} else {
+			        			temp.configure(element, size);
+			        		}
+			        		temp.revalidate();
+			        		temp.repaint();
+		        		}
+		        	}		            
+		        }
+				nbRafraichissement++;
+			}
+			
+			private void initialize() {
+				List<ArrayList<Element>> l;
+				
+				while ((l=requires().map().getMap()) == null) {
+					
+				}
+				int size = l.size();
 		        frame.setSize( size*JPANEL_SIZE, size*JPANEL_SIZE);
 		        frame.setResizable( false );
 		        frame.setLocationRelativeTo( null );
 		        frame.setLayout( new GridLayout(size,size) );
-
+		        
 		        Container container = frame.getContentPane();
 		        container.removeAll();
 		        ElementIHM temp = null;
@@ -56,16 +86,16 @@ public class IHMImpl extends IHM {
 			            container.add(temp);
 		        	}		            
 		        }
+		        
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				frame.setResizable(false);
-				nbRafraichissement++;
 		        frame.setVisible( true );
-
 			}
 
 			@Override
 			public void execution() {
 				frame = new JFrame("SMA - Terminator Team");
+				initialize();
 				do {
 					affichage();
 					try {

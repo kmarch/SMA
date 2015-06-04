@@ -4,6 +4,7 @@ import interfaces.Element;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -16,36 +17,60 @@ import enumeration.Couleur;
 public class ElementIHM extends JPanel {
 
 	private static final long serialVersionUID = -3665765221048444671L;
-
-	private BufferedImage image;
 	
-    public ElementIHM()
-    {
-        super();
-    }
+	private BufferedImage image;
+	private Couleur couleurActuelle;
+	private boolean estTerminator;
+	private boolean estNid;
+	private boolean estBoite;
 
-    public void configure(Element element, int size)
-    {
-      setSize(size,size);
-      if (element.isBoite()) {
-    	  selectImageBoite(element.getCouleur());
-      }else if (element.isNid()) {
-          selectBackground(element.getCouleur());
-          try {
-			image = ImageIO.read(new File("cart.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
+	public ElementIHM() {
+		super();
+		setVisible(true);
+	}
+
+	public boolean aChange(Element element) {
+		boolean change = false;
+		change = change || (element == null && couleurActuelle != null);
+		if (element != null) {
+			change = change || (element.getCouleur() != this.couleurActuelle);
+			change = change || (element.isBoite() != this.estBoite);
+			change = change || (element.isNid() != this.estNid);
+			change = change
+					|| ((!element.isBoite() && !element.isNid()) != this.estTerminator);
 		}
-      } else { //is robot/terminator
-          selectImageTerminator(element.getCouleur());
-      }
-      
-      setVisible(true);
-    }
-    
-    private void selectImageBoite(Couleur couleur) {
-    	File file;    	
-    	switch (couleur) {
+		return change;
+	}
+
+	public void configure(Element element, int size) {
+		this.couleurActuelle = element.getCouleur();
+		setSize(size, size);
+		if (element.isBoite()) {
+			selectImageBoite(element.getCouleur());
+			estNid = false;
+			estBoite = true;
+			estTerminator = false;
+		} else if (element.isNid()) {
+			estNid = true;
+			estBoite = false;
+			estTerminator = false;
+			selectBackground(element.getCouleur());
+			try {
+				image = ImageIO.read(new File("cart.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else { // is robot/terminator
+			estNid = false;
+			estBoite = false;
+			estTerminator = true;
+			selectImageTerminator(element.getCouleur());
+		}
+	}
+
+	private void selectImageBoite(Couleur couleur) {
+		File file;
+		switch (couleur) {
 		case ROUGE:
 			file = new File("strawberry.png");
 			break;
@@ -58,14 +83,15 @@ public class ElementIHM extends JPanel {
 		default:
 			return;
 		}
-    	try {                
-            image = ImageIO.read(file);
-         } catch (IOException ex) {}
+		try {
+			image = ImageIO.read(file);
+		} catch (IOException ex) {
+		}
 	}
 
-    private void selectImageTerminator(Couleur couleur) {
-    	File file;    	
-    	switch (couleur) {
+	private void selectImageTerminator(Couleur couleur) {
+		File file;
+		switch (couleur) {
 		case ROUGE:
 			file = new File("WALL-E.png");
 			break;
@@ -78,23 +104,37 @@ public class ElementIHM extends JPanel {
 		default:
 			return;
 		}
-    	try {                
-            image = ImageIO.read(file);
-         } catch (IOException e) {
- 			e.printStackTrace();
-         }
+		try {
+			image = ImageIO.read(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-    
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(image, 0, 0, getWidth(), getHeight(), null); // see javadoc for more info on the parameters            
-    }
-    
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);	
+		
+		if(image!= null) {
+			g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		}
+		
+		//super.paintComponent(g);		
+		//if (image != null) {
+			//
+		//}
+	}
+
 	public void configureEmpty(int size) {
-    	setSize(size,size);
-        setVisible(true);
-    }
+		estNid = false;
+		estBoite = false;
+		estTerminator = false;
+		couleurActuelle = null;
+		setSize(size, size);
+		image = null;
+		revalidate();
+		repaint();
+	}
 
 	private void selectBackground(Couleur couleur) {
 		switch (couleur) {
@@ -113,5 +153,4 @@ public class ElementIHM extends JPanel {
 		}
 	}
 
-	
 }
