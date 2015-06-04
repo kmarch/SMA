@@ -136,28 +136,28 @@ public class TerminatorCooperatifImpl extends Terminator {
 
 			private int creationRobotParCouleur(int dernierId, boolean ok, Couleur couleur) {
 				ITerminator t800;
-				if (liste.get(x + 1).get(y) == null && !ok) {
+				if ((x + 1) < liste.size() && liste.get(x + 1).get(y) == null && !ok) {
 					t800 = fabrique(logger, dernierId, couleur, x + 1, y, liste, maxBatterie);
 					liste.get(x + 1).set(y, t800);
 					ok = true;
 					t800.run();
 					logger.logCreeRobot(num, couleur);
 					dernierId++;
-				} else if (liste.get(x - 1).get(y) == null && !ok) {
+				} else if (x > 0 && liste.get(x - 1).get(y) == null && !ok) {
 					t800 = fabrique(logger, dernierId, couleur, x - 1, y, liste, maxBatterie);
 					liste.get(x - 1).set(y, t800);
 					ok = true;
 					logger.logCreeRobot(num, couleur);
 					t800.run();
 					dernierId++;
-				} else if (liste.get(x).get(y + 1) == null && !ok) {
+				} else if ((y + 1) < liste.size() && liste.get(x).get(y + 1) == null && !ok) {
 					t800 = fabrique(logger, dernierId, couleur, x, y  + 1, liste, maxBatterie);
 					liste.get(x).set(y + 1, t800);
 					logger.logCreeRobot(num, couleur);
 					ok = true;
 					t800.run();
 					dernierId++;
-				} else if (liste.get(x).get(y - 1) == null && !ok) {
+				} else if (y > 0 && liste.get(x).get(y - 1) == null && !ok) {
 					t800 = fabrique(logger, dernierId, couleur, x, y - 1, liste, maxBatterie);
 					liste.get(x).set(y - 1, t800);
 					logger.logCreeRobot(num, couleur);
