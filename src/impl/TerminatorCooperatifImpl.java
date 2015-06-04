@@ -395,6 +395,11 @@ public class TerminatorCooperatifImpl extends Terminator {
 				this.batterie = batterie;
 				
 			}
+
+			@Override
+			public int getNum() {
+				return num;
+			}
 		};
 	}
 

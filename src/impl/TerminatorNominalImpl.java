@@ -3,12 +3,10 @@ package impl;
 import interfaces.Element;
 import interfaces.ILogger;
 import interfaces.ITerminator;
-import interfaces.IEchequier;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import skynet.Global;
 import skynet.Terminator;
 import enumeration.Couleur;
 
@@ -402,6 +400,12 @@ public class TerminatorNominalImpl extends Terminator {
 				this.batterie = batterie;
 				
 			}
+			
+			@Override
+			public int getNum() {
+				return num;
+			}
+			
 		};
 	}
 

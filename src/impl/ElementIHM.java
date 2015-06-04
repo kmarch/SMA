@@ -4,7 +4,6 @@ import interfaces.Element;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +22,7 @@ public class ElementIHM extends JPanel {
 	private boolean estTerminator;
 	private boolean estNid;
 	private boolean estBoite;
+	private int num;
 
 	public ElementIHM() {
 		super();
@@ -118,11 +118,6 @@ public class ElementIHM extends JPanel {
 		if(image!= null) {
 			g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		}
-		
-		//super.paintComponent(g);		
-		//if (image != null) {
-			//
-		//}
 	}
 
 	public void configureEmpty(int size) {
@@ -151,6 +146,14 @@ public class ElementIHM extends JPanel {
 			setBackground(Color.LIGHT_GRAY);
 			break;
 		}
+	}
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
 	}
 
 }
