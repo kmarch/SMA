@@ -33,8 +33,8 @@ public class TerminatorNominalImpl extends Terminator {
 			}
 
 			public void execution() {
+				int etape = 1;
 				do{
-				int etape = 1; 
 				Element boitePlusProche = boitePlusProche(listeBoite(liste));
 				if(boitePlusProche != null){
 					System.out.println("boitePlusProche = " + boitePlusProche.getX() + " " + boitePlusProche.getY());
@@ -46,10 +46,9 @@ public class TerminatorNominalImpl extends Terminator {
 						etape = 2;
 						//tant que on a pas atteint les coordonnées de la boite
 						while((boitePlusProche.getX() != getX()) || (boitePlusProche.getY() != getY()) && etape == 2){
-							Element boitePlusProcheAvantDeplacement = boitePlusProche(listeBoite(liste));
-							//On regarde que la boite la plus proche est toujours la même
-							if(boitePlusProche.equals(boitePlusProcheAvantDeplacement)){
-								deplacement(boitePlusProche, liste);
+							//On regarde que la boite est toujours la
+							if(liste.get(boitePlusProche.getX()).get(boitePlusProche.getY()) != null){
+								deplacement(boitePlusProche);
 								System.out.println("batterie = " + getBatterie());
 								try {
 									Thread.sleep(1000);
@@ -66,9 +65,9 @@ public class TerminatorNominalImpl extends Terminator {
 						}
 						logger.logPriseBoite(num, boitePlusProche);
 						//On a atteint la boite il faut la ramener au nid correspondant
-						Element nid = nidCorrespondant(boitePlusProche,listeNids(liste));
-						while(!aCoteNid(nid)){
-								deplacement(nid, liste);	
+						Element nid = nidCorrespondant(boitePlusProche,listeNids());
+						while(!aCoteNid(nid) && etape == 2){
+								deplacement(nid);	
 								System.out.println("batterie = " + getBatterie());
 								try {
 									Thread.sleep(1000);
@@ -77,14 +76,18 @@ public class TerminatorNominalImpl extends Terminator {
 									e.printStackTrace();
 								}
 						}
+						if(aCoteNid(nid)){
 						logger.logPoseBoite(num, boitePlusProche, nid);
-						setBatterie(100);
+						setBatterie(2000);
+						}
 					}
 					else{
 						System.out.println("Pas assez de batterie");
+						liste.get(getX()).set(getY(),null); 
+						etape = 0;
 					}
 				}
-				}while(true);
+				}while(etape != 0);
 				
 				
 			}
@@ -114,26 +117,23 @@ public class TerminatorNominalImpl extends Terminator {
 				ArrayList<Element> listeBoite = new ArrayList<Element>();
 				for(int i=0;i<liste.size();i++){
 					for(int j=0;j<liste.size();j++){
-						if(liste.get(i).get(j) != null){
-							if(liste.get(i).get(j).isBoite()){
+						synchronized (liste) {
+							if((liste.get(i).get(j) != null) && (liste.get(i).get(j).isBoite())){
 								listeBoite.add(liste.get(i).get(j));
 							}
-						}
-						
+						}			
 					}
 				}
 				return listeBoite;
 			}
 			
 			//Retourne la liste des nids
-			public ArrayList<Element> listeNids(List<ArrayList<Element>> liste) {
+			public ArrayList<Element> listeNids() {
 				ArrayList<Element> listeNids = new ArrayList<Element>();
 				for(int i=0;i<liste.size();i++){
 					for(int j=0;j<liste.size();j++){
-						if(liste.get(i).get(j) != null){
-							if(liste.get(i).get(j).isNid()){
-								listeNids.add(liste.get(i).get(j));
-							}
+						if((liste.get(i).get(j) != null) && (liste.get(i).get(j).isNid())){
+							listeNids.add(liste.get(i).get(j));
 						}
 						
 					}
@@ -191,13 +191,13 @@ public class TerminatorNominalImpl extends Terminator {
 			public int distance(Element boite){
 				int distanceToBoite = distanceBoitePlusProche(boite);
 				System.out.println("distanceDeLaBoite = " + distanceToBoite);
-				int distanceBoiteToNid = distanceBoitePlusProcheToNid(boite,nidCorrespondant(boite,listeNids(liste)));
+				int distanceBoiteToNid = distanceBoitePlusProcheToNid(boite,nidCorrespondant(boite,listeNids()));
 				System.out.println("distanceDeLaBoiteAuNid = " + distanceBoiteToNid);
 				return distanceToBoite + distanceBoiteToNid;
 				
 			}
 			//Deplace le robot
-			public void deplacement(Element boite,List<ArrayList<Element>> liste){
+			public void deplacement(Element boite){
 				//boite en bas à droite par rapport au robot
 				if((boite.getX() > getX()) && (boite.getY() > getY())){
 					System.out.println("Bas droite");
@@ -281,55 +281,58 @@ public class TerminatorNominalImpl extends Terminator {
 						batterie = batterie - 5;
 					}
 				}
+				synchronized (liste) {
 				//boite en dessous
-				else if((boite.getX() == getX()) && (boite.getY() > getY())){
-					System.out.println("dessous");
-					if(liste.get(getX()).get(getY() +1) == null || boite.getY() == y+1){
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX()).set(getY() +1,e);
-						liste.get(getX()).set(getY(),null); 
-						y++;
-						batterie = batterie - 5;
-					}
-				}
-				
-				//boite en dessus
-				else if((boite.getX() == getX()) && (boite.getY() < getY())){
-					System.out.println("dessus");
-					if(liste.get(getX()).get(getY() -1) == null || boite.getY() == y-1){
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX()).set(getY() -1,e);
-						liste.get(getX()).set(getY(),null); 
-						y--;
-						batterie = batterie - 5;
-					}
-				}
-				
+					 if((boite.getX() == getX()) && (boite.getY() > getY())){
+						System.out.println("dessous");
+						if(liste.get(getX()).get(getY() +1) == null || boite.getY() == y+1){
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() +1,e);
+							liste.get(getX()).set(getY(),null); 
+							y++;
+							batterie = batterie - 5;
+						}
+					 }
+
+							
+							
+					//boite en dessus
+					 if((boite.getX() == getX()) && (boite.getY() < getY())){
+						System.out.println("dessus");
+						if(liste.get(getX()).get(getY() -1) == null || boite.getY() == y-1){
+							Element f = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() -1,f);
+							liste.get(getX()).set(getY(),null); 
+							y--;
+							batterie = batterie - 5;
+						}
+					}	
 				//boite à gauche
-				else if((boite.getX() < getX()) && (boite.getY() == getY())){
-					//deplace vers la gauche
-					System.out.println("gauche");
-					if(liste.get(getX() -1).get(getY()) == null || boite.getX() == x-1){
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX()-1).set(getY(),e);
-						liste.get(getX()).set(getY(),null);
-						x--;
-						batterie = batterie - 5;
+					if((boite.getX() < getX()) && (boite.getY() == getY())){
+						//deplace vers la gauche
+						System.out.println("gauche");
+						if(liste.get(getX() -1).get(getY()) == null || boite.getX() == x-1){
+							Element g = liste.get(getX()).get(getY());
+							liste.get(getX()-1).set(getY(),g);
+							liste.get(getX()).set(getY(),null);
+							x--;
+							batterie = batterie - 5;
+						}
 					}
-				}
 				
 				//boite à droite
-				else if((boite.getX() > getX()) && (boite.getY() == getY())){
+				if((boite.getX() > getX()) && (boite.getY() == getY())){
 					//deplace vers la droite
 					System.out.println("droite");
 					if(liste.get(getX() +1).get(getY()) == null || boite.getX() == x+1){
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX()+1).set(getY(),e);
+						Element h = liste.get(getX()).get(getY());
+						liste.get(getX()+1).set(getY(),h);
 						liste.get(getX()).set(getY(),null); 
 						x++;
 						batterie = batterie - 5;
 					}
 				}
+			}
 				logger.logDeplacement(num, x, y);
 				System.out.println("boite.getX() : " + boite.getX() + " boite.getY() : " + boite.getY()
 						+ " getX() : " + getX() + " getY() : " + getY());

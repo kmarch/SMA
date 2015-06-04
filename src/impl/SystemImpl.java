@@ -101,7 +101,7 @@ public class SystemImpl extends Systeme {
 				for (int i = 0, nbRobots = 0; i < robots.length; i += 3, nbRobots++) {
 					t800 = requires().manage().fabrique(requires().logger(), nbRobots,
 							getCouleur(robots[i + 2]), getInt(robots[i]),
-							getInt(robots[i + 1]), liste, 100);
+							getInt(robots[i + 1]), liste, Integer.parseInt(properties.getProperty("batterie")));
 					liste.get(getInt(robots[i])).set(getInt(robots[i + 1]),
 							t800);
 					t800.run();
