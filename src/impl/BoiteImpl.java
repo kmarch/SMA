@@ -8,7 +8,7 @@ public class BoiteImpl implements Element {
 	private Couleur couleur;
 	private int x;
 	private int y;
-	private boolean reservee = false;
+	private boolean reservee;
 
 	public BoiteImpl(Couleur couleur,int x,int y,boolean reservee) {
 		this.couleur = couleur;
