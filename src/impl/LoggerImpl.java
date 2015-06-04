@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import enumeration.Couleur;
 import skynet.Logger;
 
 public class LoggerImpl extends Logger{
@@ -46,6 +47,19 @@ public class LoggerImpl extends Logger{
 		            FileWriter lWriter = new FileWriter(lFile, true);
 		            lWriter.write("Pose de la boite de couleur "  + boite.getCouleur().toString() + 
 		            		" dans le nid " + nid.getCouleur().toString());
+		            lWriter.close();
+		        } catch (IOException lEx) {
+		            lEx.printStackTrace();
+		        }
+			}
+
+			@Override
+			public void logCreeRobot(int numRobot, Couleur couleur) {
+				try {
+					System.out.println("Créé un robot de couleur: " + couleur);
+		            File lFile = new File(numRobot + ".log");
+		            FileWriter lWriter = new FileWriter(lFile, true);
+		            lWriter.write("Créé un robot de couleur :" + couleur);
 		            lWriter.close();
 		        } catch (IOException lEx) {
 		            lEx.printStackTrace();
