@@ -1,13 +1,14 @@
 package impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import enumeration.Couleur;
 import interfaces.Element;
 import interfaces.ILogger;
 import interfaces.ITerminator;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import skynet.Terminator;
+import enumeration.Couleur;
 
 public class TerminatorCooperatifImpl extends Terminator {
 
@@ -120,103 +121,53 @@ public class TerminatorCooperatifImpl extends Terminator {
 						dernierId = robot.getId();
 					}
 				}
-				ITerminator t800;
+
 				boolean ok = false;
 				if (nbBoite[0] > (liste.size() * liste.size()) / 5) {
-					if (liste.get(x + 1).get(y) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.BLEU, x + 1, y, liste, maxBatterie);
-						liste.get(x + 1).set(y, t800);
-						ok = true;
-						t800.run();
-						logger.logCreeRobot(num, Couleur.BLEU);
-						dernierId++;
-					} else if (liste.get(x - 1).get(y) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.BLEU, x - 1, y, liste, maxBatterie);
-						liste.get(x - 1).set(y, t800);
-						ok = true;
-						logger.logCreeRobot(num, Couleur.BLEU);
-						t800.run();
-						dernierId++;
-					} else if (liste.get(x).get(y + 1) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.BLEU, x, y  + 1, liste, maxBatterie);
-						liste.get(x).set(y + 1, t800);
-						logger.logCreeRobot(num, Couleur.BLEU);
-						ok = true;
-						t800.run();
-						dernierId++;
-					} else if (liste.get(x).get(y - 1) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.BLEU, x, y - 1, liste, maxBatterie);
-						liste.get(x).set(y - 1, t800);
-						logger.logCreeRobot(num, Couleur.BLEU);
-						ok = true;
-						t800.run();
-						dernierId++;
-					}
+					dernierId = creationRobotParCouleur(dernierId, ok, Couleur.BLEU);
 				}
 				ok = false;
 				if (nbBoite[1] > (liste.size() * liste.size()) / 5) {
-					if (liste.get(x + 1).get(y) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.ROUGE, x + 1, y, liste, maxBatterie);
-						liste.get(x + 1).set(y, t800);
-						logger.logCreeRobot(num, Couleur.ROUGE);
-						ok = true;
-						t800.run();
-						dernierId++;
-					} else if (liste.get(x - 1).get(y) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.ROUGE, x - 1, y, liste, maxBatterie);
-						liste.get(x - 1).set(y, t800);
-						logger.logCreeRobot(num, Couleur.ROUGE);
-						ok = true;
-						t800.run();
-						dernierId++;
-					} else if (liste.get(x).get(y + 1) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.ROUGE, x, y  + 1, liste, maxBatterie);
-						liste.get(x).set(y + 1, t800);
-						logger.logCreeRobot(num, Couleur.ROUGE);
-						ok = true;
-						t800.run();
-						dernierId++;
-					} else if (liste.get(x).get(y - 1) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.ROUGE, x, y - 1, liste, maxBatterie);
-						liste.get(x).set(y - 1, t800);
-						logger.logCreeRobot(num, Couleur.ROUGE);
-						ok = true;
-						t800.run();
-						dernierId++;
-					}
+					dernierId = creationRobotParCouleur(dernierId, ok, Couleur.ROUGE);
 				}
 				ok = false;
 				if (nbBoite[2] > (liste.size() * liste.size()) / 5) {
-					if (liste.get(x + 1).get(y) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.VERT, x + 1, y, liste, maxBatterie);
-						liste.get(x + 1).set(y, t800);
-						logger.logCreeRobot(num, Couleur.VERT);
-						ok = true;
-						t800.run();
-						dernierId++;
-					} else if (liste.get(x - 1).get(y) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.VERT, x - 1, y, liste, maxBatterie);
-						liste.get(x - 1).set(y, t800);
-						logger.logCreeRobot(num, Couleur.VERT);
-						ok = true;
-						t800.run();
-						dernierId++;
-					} else if (liste.get(x).get(y + 1) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.VERT, x, y  + 1, liste, maxBatterie);
-						liste.get(x).set(y + 1, t800);
-						logger.logCreeRobot(num, Couleur.VERT);
-						ok = true;
-						t800.run();
-						dernierId++;
-					} else if (liste.get(x).get(y - 1) == null && !ok) {
-						t800 = fabrique(logger, dernierId, Couleur.VERT, x, y - 1, liste, maxBatterie);
-						liste.get(x).set(y - 1, t800);
-						logger.logCreeRobot(num, Couleur.VERT);
-						ok = true;
-						t800.run();
-						dernierId++;
-					}
+					dernierId = creationRobotParCouleur(dernierId, ok, Couleur.VERT);
 				}
+			}
+
+			private int creationRobotParCouleur(int dernierId, boolean ok, Couleur couleur) {
+				ITerminator t800;
+				if (liste.get(x + 1).get(y) == null && !ok) {
+					t800 = fabrique(logger, dernierId, couleur, x + 1, y, liste, maxBatterie);
+					liste.get(x + 1).set(y, t800);
+					ok = true;
+					t800.run();
+					logger.logCreeRobot(num, couleur);
+					dernierId++;
+				} else if (liste.get(x - 1).get(y) == null && !ok) {
+					t800 = fabrique(logger, dernierId, couleur, x - 1, y, liste, maxBatterie);
+					liste.get(x - 1).set(y, t800);
+					ok = true;
+					logger.logCreeRobot(num, couleur);
+					t800.run();
+					dernierId++;
+				} else if (liste.get(x).get(y + 1) == null && !ok) {
+					t800 = fabrique(logger, dernierId, couleur, x, y  + 1, liste, maxBatterie);
+					liste.get(x).set(y + 1, t800);
+					logger.logCreeRobot(num, couleur);
+					ok = true;
+					t800.run();
+					dernierId++;
+				} else if (liste.get(x).get(y - 1) == null && !ok) {
+					t800 = fabrique(logger, dernierId, couleur, x, y - 1, liste, maxBatterie);
+					liste.get(x).set(y - 1, t800);
+					logger.logCreeRobot(num, couleur);
+					ok = true;
+					t800.run();
+					dernierId++;
+				}
+				return dernierId;
 			}
 
 			@Override
