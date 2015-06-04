@@ -30,41 +30,32 @@ public class TerminatorCooperatifImpl extends Terminator {
 			}
 
 			public void execution() {
+				int etape = 1;
 				do {
 					System.out.println("lol");
-					int etape = 1;
-					Element boitePlusProche = boitePlusProche(listeBoite());
+					Element boitePlusProche;
+					
 					synchronized (liste) {
+						boitePlusProche = boitePlusProche(listeBoite());
 						ajoutDeNouveauxTerminator();
 					}
 					System.out.println("la");
 
 					// robot de cette couleur
-					if (boitePlusProche != null) {
-						System.out.println("boitePlusProche = "
-								+ boitePlusProche.getX() + " "
-								+ boitePlusProche.getY());
+					if(boitePlusProche != null){
+						System.out.println("boitePlusProche = " + boitePlusProche.getX() + " " + boitePlusProche.getY());
 						int distance = distance(boitePlusProche);
 						System.out.println("distance = " + distance);
-						// On considére que le cout de déplacement d'une case
-						// est de 5
-						// On regarde ici que la batterie est suffisante pour
-						// ramener la boite
-						if (getBatterie() > 5 * distance) {
+						//On considére que le cout de déplacement d'une case est de 5
+						//On regarde ici que la batterie est suffisante pour ramener la boite
+						if(getBatterie() > 5*distance){
 							etape = 2;
-							// tant que on a pas atteint les coordonnées de la
-							// boite
-							while ((boitePlusProche.getX() != getX())
-									|| (boitePlusProche.getY() != getY())
-									&& etape == 2) {
-								Element boitePlusProcheAvantDeplacement = boitePlusProche(listeBoite());
-								// On regarde que la boite la plus proche est
-								// toujours la même
-								if (boitePlusProche
-										.equals(boitePlusProcheAvantDeplacement)) {
-									deplacement(boitePlusProche, liste);
-									System.out.println("batterie = "
-											+ getBatterie());
+							//tant que on a pas atteint les coordonnées de la boite
+							while((boitePlusProche.getX() != getX()) || (boitePlusProche.getY() != getY()) && etape == 2){
+								//On regarde que la boite est toujours la
+								if(liste.get(boitePlusProche.getX()).get(boitePlusProche.getY()) != null){
+									deplacement(boitePlusProche);
+									System.out.println("batterie = " + getBatterie());
 									try {
 										Thread.sleep(1000);
 									} catch (InterruptedException e) {
@@ -72,36 +63,37 @@ public class TerminatorCooperatifImpl extends Terminator {
 										e.printStackTrace();
 									}
 								}
-								// gérer la cas ou la boite n'est plus là
-								else {
+								//gérer la cas ou la boite n'est plus là
+								else{
 									etape = 1;
 								}
-
+								
 							}
 							logger.logPriseBoite(num, boitePlusProche);
-							// On a atteint la boite il faut la ramener au nid
-							// correspondant
-							Element nid = nidCorrespondant(boitePlusProche,
-									listeNids(liste));
-							while (!aCoteNid(nid)) {
-								deplacement(nid, liste);
-								System.out.println("batterie = "
-										+ getBatterie());
-								try {
-									Thread.sleep(1000);
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
+							//On a atteint la boite il faut la ramener au nid correspondant
+							Element nid = nidCorrespondant(boitePlusProche,listeNids());
+							while(!aCoteNid(nid) && etape == 2){
+									deplacement(nid);	
+									System.out.println("batterie = " + getBatterie());
+									try {
+										Thread.sleep(1000);
+									} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
 							}
+							if(aCoteNid(nid)){
 							logger.logPoseBoite(num, boitePlusProche, nid);
-							setBatterie(100);
-						} else {
+							setBatterie(2000);
+							}
+						}
+						else{
 							System.out.println("Pas assez de batterie");
-							break;
+							liste.get(getX()).set(getY(),null); 
+							etape = 0;
 						}
 					}
-				} while (true);
+					}while(etape != 0);
 				System.out.println("Fin robot");
 			}
 
@@ -236,7 +228,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 			}
 
 			// Retourne la liste des nids
-			public ArrayList<Element> listeNids(List<ArrayList<Element>> liste) {
+			public ArrayList<Element> listeNids() {
 				ArrayList<Element> listeNids = new ArrayList<Element>();
 				for (int i = 0; i < liste.size(); i++) {
 					for (int j = 0; j < liste.size(); j++) {
@@ -254,11 +246,12 @@ public class TerminatorCooperatifImpl extends Terminator {
 			// Retourne la boite la plus proche ayant la même couleur que le
 			// robot
 			public Element boitePlusProche(ArrayList<Element> boite) {
+
 				int distance = 10000000;
 				int dist;
 				Element plusProche = null;
 				for (Element elem : boite) {
-					if ((getCouleur().equals(elem.getCouleur()) && (!((BoiteImpl) elem)
+					if ((getCouleur().equals(elem.getCouleur())) && (!(((BoiteImpl) elem)
 							.isReserved()))) {
 						int x = getX() - elem.getX();
 						int y = getY() - elem.getY();
@@ -273,6 +266,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 					((BoiteImpl) plusProche).reserver();
 				}
 				return plusProche;
+				
 			}
 
 			// Retoune la distance entre la boite la plus proche et le nid ayant
@@ -311,7 +305,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 				int distanceToBoite = distanceBoitePlusProche(boite);
 				System.out.println("distanceDeLaBoite = " + distanceToBoite);
 				int distanceBoiteToNid = distanceBoitePlusProcheToNid(boite,
-						nidCorrespondant(boite, listeNids(liste)));
+						nidCorrespondant(boite, listeNids()));
 				System.out.println("distanceDeLaBoiteAuNid = "
 						+ distanceBoiteToNid);
 				return distanceToBoite + distanceBoiteToNid;
@@ -319,8 +313,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 			}
 
 			// Deplace le robot
-			public void deplacement(Element boite,
-					List<ArrayList<Element>> liste) {
+			public void deplacement(Element boite) {
 				// boite en bas à droite par rapport au robot
 				if ((boite.getX() > getX()) && (boite.getY() > getY())) {
 					System.out.println("Bas droite");
