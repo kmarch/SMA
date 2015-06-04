@@ -400,12 +400,11 @@ public class TerminatorNominalImpl extends Terminator {
 				this.batterie = batterie;
 				
 			}
-			
+
 			@Override
-			public int getNum() {
+			public int getId() {
 				return num;
 			}
-			
 		};
 	}
 

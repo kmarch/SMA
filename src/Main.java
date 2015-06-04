@@ -9,7 +9,7 @@ public class Main {
 
 	public static void main(String[]args) {
 		// cas nominal
-		Global.Component systeme = (new  GlobalNominalImpl()).newComponent();
+		Global.Component systeme = (new  GlobalCooperatifImpl()).newComponent();
 		
 		IEchequier echequier =  systeme.initalisation();
 		systeme.lancementIHM().run();
