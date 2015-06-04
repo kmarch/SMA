@@ -99,7 +99,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 
 			@Override
 			public ITerminator fabrique(ILogger logger, int num, Couleur couleur, int i, int j, List<ArrayList<Element>> liste, int batterie){
-				Terminator.Component systeme = (new  TerminatorNominalImpl()).newComponent();
+				Terminator.Component systeme = (new  TerminatorCooperatifImpl()).newComponent();
 				return systeme.manage().intialisation(logger, num, couleur, i, j, liste, batterie);
 
 			}
