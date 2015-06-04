@@ -1,13 +1,14 @@
 package impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import enumeration.Couleur;
 import interfaces.Element;
 import interfaces.ILogger;
 import interfaces.ITerminator;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import skynet.Terminator;
+import enumeration.Couleur;
 
 public class TerminatorCooperatifImpl extends Terminator {
 
@@ -120,7 +121,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 						dernierId = robot.getId();
 					}
 				}
-				ITerminator t800;
+
 				boolean ok = false;
 				if (nbBoite[0] > (liste.size() * liste.size()) / 5) {
 					dernierId = creationRobotParCouleur(dernierId, ok, Couleur.BLEU);
