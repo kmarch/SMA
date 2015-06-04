@@ -33,14 +33,12 @@ public class TerminatorCooperatifImpl extends Terminator {
 			public void execution() {
 				int etape = 1;
 				do {
-					System.out.println("lol");
 					Element boitePlusProche;
 					
 					synchronized (liste) {
 						boitePlusProche = boitePlusProche(listeBoite());
 						ajoutDeNouveauxTerminator();
 					}
-					System.out.println("la");
 
 					// robot de cette couleur
 					if(boitePlusProche != null){
@@ -123,15 +121,15 @@ public class TerminatorCooperatifImpl extends Terminator {
 				}
 
 				boolean ok = false;
-				if (nbBoite[0] > (liste.size() * liste.size()) / 5) {
+				if (nbBoite[0] > (liste.size() * liste.size()) / 20) {
 					dernierId = creationRobotParCouleur(dernierId, ok, Couleur.BLEU);
 				}
 				ok = false;
-				if (nbBoite[1] > (liste.size() * liste.size()) / 5) {
+				if (nbBoite[1] > (liste.size() * liste.size()) / 20) {
 					dernierId = creationRobotParCouleur(dernierId, ok, Couleur.ROUGE);
 				}
 				ok = false;
-				if (nbBoite[2] > (liste.size() * liste.size()) / 5) {
+				if (nbBoite[2] > (liste.size() * liste.size()) / 20) {
 					dernierId = creationRobotParCouleur(dernierId, ok, Couleur.VERT);
 				}
 			}
