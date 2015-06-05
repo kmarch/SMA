@@ -1,9 +1,12 @@
 package impl;
 
 import interfaces.Element;
+import interfaces.ITerminator;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +16,7 @@ import javax.swing.JPanel;
 
 import enumeration.Couleur;
 
-public class ElementIHM extends JPanel {
+public class ElementIHM extends JPanel implements MouseListener {
 
 	private static final long serialVersionUID = -3665765221048444671L;
 	
@@ -22,7 +25,7 @@ public class ElementIHM extends JPanel {
 	private boolean estTerminator;
 	private boolean estNid;
 	private boolean estBoite;
-	private int num;
+	private Integer num;
 
 	public ElementIHM() {
 		super();
@@ -50,10 +53,12 @@ public class ElementIHM extends JPanel {
 			estNid = false;
 			estBoite = true;
 			estTerminator = false;
+			num=null;
 		} else if (element.isNid()) {
 			estNid = true;
 			estBoite = false;
 			estTerminator = false;
+			num=null;
 			selectBackground(element.getCouleur());
 			try {
 				image = ImageIO.read(new File("cart.png"));
@@ -64,6 +69,7 @@ public class ElementIHM extends JPanel {
 			estNid = false;
 			estBoite = false;
 			estTerminator = true;
+			num = ((ITerminator) element).getId();
 			selectImageTerminator(element.getCouleur());
 		}
 	}
@@ -125,6 +131,7 @@ public class ElementIHM extends JPanel {
 		estBoite = false;
 		estTerminator = false;
 		couleurActuelle = null;
+		num=null;
 		setSize(size, size);
 		image = null;
 		revalidate();
@@ -148,12 +155,31 @@ public class ElementIHM extends JPanel {
 		}
 	}
 
-	public int getNum() {
-		return num;
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		if(num!=null) {
+			
+		}
 	}
 
-	public void setNum(int num) {
-		this.num = num;
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		
 	}
 
 }
