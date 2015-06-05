@@ -590,6 +590,11 @@ public class TerminatorCooperatifImpl extends Terminator {
 			public Element getBoite() {
 				return boite;
 			}
+
+			@Override
+			public int getMaxBatterie() {
+				return maxBatterie;
+			}
 		};
 	}
 

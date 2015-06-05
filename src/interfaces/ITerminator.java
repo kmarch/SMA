@@ -13,6 +13,7 @@ public interface ITerminator extends Element{
 	public void execution();
 	public int getId();
 	public int getBatterie();
+	public int getMaxBatterie();
 	public Element getBoite();
 }
 
