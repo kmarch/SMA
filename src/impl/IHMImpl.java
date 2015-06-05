@@ -21,7 +21,7 @@ public class IHMImpl extends IHM {
 	protected IIHM make_affichage() {
 		return new IIHM() {
 
-			public static final int JPANEL_SIZE = 40;
+			public static final int JPANEL_SIZE = 15;
 			private JFrame frame;
 			private int nbRafraichissement;
 			
