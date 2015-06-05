@@ -23,6 +23,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 			private int batterie;
 			private int maxBatterie;
 			private List<ArrayList<Element>> liste;
+			private Element boite;
 			private ILogger logger;
 
 			@Override
@@ -32,6 +33,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 
 			public void execution() {
 				int etape = 1;
+				int batterieMax = batterie;
 				do {
 					Element boitePlusProche;
 					
@@ -42,12 +44,11 @@ public class TerminatorCooperatifImpl extends Terminator {
 
 					// robot de cette couleur
 					if(boitePlusProche != null){
-						System.out.println("boitePlusProche = " + boitePlusProche.getX() + " " + boitePlusProche.getY());
+						System.out.println("\nbatterie = " + getBatterie());
 						int distance = distance(boitePlusProche);
-						System.out.println("distance = " + distance);
 						//On considére que le cout de déplacement d'une case est de 5
 						//On regarde ici que la batterie est suffisante pour ramener la boite
-						if(getBatterie() > 5*distance){
+						if(batterie > 5*distance){
 							etape = 2;
 							//tant que on a pas atteint les coordonnées de la boite
 							while((boitePlusProche.getX() != getX()) || (boitePlusProche.getY() != getY()) && etape == 2){
@@ -82,14 +83,27 @@ public class TerminatorCooperatifImpl extends Terminator {
 									}
 							}
 							if(aCoteNid(nid)){
-							logger.logPoseBoite(num, boitePlusProche, nid);
-							setBatterie(2000);
+								logger.logPoseBoite(num, boitePlusProche, nid);
+								setBoite(null);
+								if(getCouleur().equals(nid.getCouleur())){
+									batterie = batterie + ((2 * batterieMax) /3);
+								}
+								else{
+									batterie = batterie + ((1 * batterieMax) /3);
+								}
+							}
+							
+							if(batterie > batterieMax){
+								batterie = batterieMax;
 							}
 						}
 						else{
-							System.out.println("Pas assez de batterie");
-							liste.get(getX()).set(getY(),null); 
-							etape = 0;
+							batterie --;
+							if(batterie == 0){
+								System.out.println("Plus de batterie");
+								liste.get(getX()).set(getY(),null); 
+								etape = 0;
+							}
 						}
 					}
 					}while(etape != 0);
@@ -147,25 +161,25 @@ public class TerminatorCooperatifImpl extends Terminator {
 			private int creationRobotParCouleur(int dernierId, Couleur couleur) {
 				ITerminator t800;
 				if ((x + 1) < liste.size() && liste.get(x + 1).get(y) == null) {
-					t800 = fabrique(logger, dernierId, couleur, x + 1, y, liste, maxBatterie);
+					t800 = fabrique(logger, dernierId, couleur, x + 1, y, liste, maxBatterie,null);
 					liste.get(x + 1).set(y, t800);
 					t800.run();
 					logger.logCreeRobot(num, couleur);
 					return dernierId++;
 				} else if (x > 0 && liste.get(x - 1).get(y) == null) {
-					t800 = fabrique(logger, dernierId, couleur, x - 1, y, liste, maxBatterie);
+					t800 = fabrique(logger, dernierId, couleur, x - 1, y, liste, maxBatterie,null);
 					liste.get(x - 1).set(y, t800);
 					logger.logCreeRobot(num, couleur);
 					t800.run();
 					return dernierId++;
 				} else if ((y + 1) < liste.size() && liste.get(x).get(y + 1) == null) {
-					t800 = fabrique(logger, dernierId, couleur, x, y  + 1, liste, maxBatterie);
+					t800 = fabrique(logger, dernierId, couleur, x, y  + 1, liste, maxBatterie,null);
 					liste.get(x).set(y + 1, t800);
 					logger.logCreeRobot(num, couleur);
 					t800.run();
 					return dernierId++;
 				} else if (y > 0 && liste.get(x).get(y - 1) == null) {
-					t800 = fabrique(logger, dernierId, couleur, x, y - 1, liste, maxBatterie);
+					t800 = fabrique(logger, dernierId, couleur, x, y - 1, liste, maxBatterie,null);
 					liste.get(x).set(y - 1, t800);
 					logger.logCreeRobot(num, couleur);
 					t800.run();
@@ -177,7 +191,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 			@Override
 			public ITerminator intialisation(ILogger logger, int num,
 					Couleur couleur, int x, int y,
-					List<ArrayList<Element>> listePion, int batterie) {
+					List<ArrayList<Element>> listePion, int batterie, Element boite) {
 				this.num = num;
 				this.couleur = couleur;
 				this.x = x;
@@ -186,17 +200,18 @@ public class TerminatorCooperatifImpl extends Terminator {
 				this.batterie = batterie;
 				this.maxBatterie = batterie;
 				this.logger = logger;
+				this.boite = boite;
 				return this;
 			}
 
 			@Override
 			public ITerminator fabrique(ILogger logger, int num,
 					Couleur couleur, int i, int j,
-					List<ArrayList<Element>> liste, int batterie) {
+					List<ArrayList<Element>> liste, int batterie, Element element) {
 				Terminator.Component systeme = (new TerminatorCooperatifImpl())
 						.newComponent();
 				return systeme.manage().intialisation(logger, num, couleur, i,
-						j, liste, batterie);
+						j, liste, batterie, element);
 
 			}
 
@@ -405,26 +420,44 @@ public class TerminatorCooperatifImpl extends Terminator {
 				// boite en dessous
 				else if ((boite.getX() == getX()) && (boite.getY() > getY())) {
 					System.out.println("dessous");
-					if (liste.get(getX()).get(getY() + 1) == null
-							|| boite.getY() == y + 1) {
+					if (liste.get(getX()).get(getY() + 1) == null) {
 						Element e = liste.get(getX()).get(getY());
 						liste.get(getX()).set(getY() + 1, e);
 						liste.get(getX()).set(getY(), null);
 						y++;
 						batterie = batterie - 5;
 					}
+					synchronized (liste) {
+					if(boite.getY() == y + 1 && boite.isBoite()){
+						setBoite(liste.get(getX()).get(getY() + 1));
+						Element e = liste.get(getX()).get(getY());
+						liste.get(getX()).set(getY() + 1, e);
+						liste.get(getX()).set(getY(), null);
+						y++;
+						batterie = batterie - 5;
+						}		
+					}
 				}
 
 				// boite en dessus
 				else if ((boite.getX() == getX()) && (boite.getY() < getY())) {
 					System.out.println("dessus");
-					if (liste.get(getX()).get(getY() - 1) == null
-							|| boite.getY() == y - 1) {
+					if (liste.get(getX()).get(getY() - 1) == null) {
 						Element e = liste.get(getX()).get(getY());
 						liste.get(getX()).set(getY() - 1, e);
 						liste.get(getX()).set(getY(), null);
 						y--;
 						batterie = batterie - 5;
+					}
+					synchronized (liste) {
+						if(boite.getY() == y - 1 && boite.isBoite()){
+							setBoite(liste.get(getX()).get(getY() - 1));
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() - 1, e);
+							liste.get(getX()).set(getY(), null);
+							y--;
+							batterie = batterie - 5;
+						}
 					}
 				}
 
@@ -432,13 +465,22 @@ public class TerminatorCooperatifImpl extends Terminator {
 				else if ((boite.getX() < getX()) && (boite.getY() == getY())) {
 					// deplace vers la gauche
 					System.out.println("gauche");
-					if (liste.get(getX() - 1).get(getY()) == null
-							|| boite.getX() == x - 1) {
+					if (liste.get(getX() - 1).get(getY()) == null) {
 						Element e = liste.get(getX()).get(getY());
 						liste.get(getX() - 1).set(getY(), e);
 						liste.get(getX()).set(getY(), null);
 						x--;
 						batterie = batterie - 5;
+					}
+					synchronized (liste) {
+					if(boite.getX() == x - 1 && boite.isBoite()){
+						setBoite(liste.get(getX() - 1).get(getY()));
+						Element e = liste.get(getX()).get(getY());
+						liste.get(getX() - 1).set(getY(), e);
+						liste.get(getX()).set(getY(), null);
+						x--;
+						batterie = batterie - 5;
+						}
 					}
 				}
 
@@ -446,14 +488,24 @@ public class TerminatorCooperatifImpl extends Terminator {
 				else if ((boite.getX() > getX()) && (boite.getY() == getY())) {
 					// deplace vers la droite
 					System.out.println("droite");
-					if (liste.get(getX() + 1).get(getY()) == null
-							|| boite.getX() == x + 1) {
+					if (liste.get(getX() + 1).get(getY()) == null) {
 						Element e = liste.get(getX()).get(getY());
 						liste.get(getX() + 1).set(getY(), e);
 						liste.get(getX()).set(getY(), null);
 						x++;
 						batterie = batterie - 5;
 					}
+					synchronized (liste) {
+						if(boite.getX() == x + 1 && boite.isBoite()){
+							setBoite(liste.get(getX() + 1).get(getY()));
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX() + 1).set(getY(), e);
+							liste.get(getX()).set(getY(), null);
+							x++;
+							batterie = batterie - 5;
+						}
+					}
+					
 				}
 				logger.logDeplacement(num, x, y);
 				System.out.println("boite.getX() : " + boite.getX()
@@ -528,6 +580,15 @@ public class TerminatorCooperatifImpl extends Terminator {
 			@Override
 			public int getId() {
 				return num;
+			}
+			
+			public void setBoite(Element boite){
+				this.boite = boite;
+			}
+
+			@Override
+			public Element getBoite() {
+				return boite;
 			}
 		};
 	}
