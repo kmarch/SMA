@@ -12,5 +12,6 @@ public interface ITerminator extends Element{
 	public ITerminator fabrique(ILogger logger, int num, Couleur couleur, int i, int j, List<ArrayList<Element>> liste, int batterie);
 	public void execution();
 	public int getId();
+	public int getBatterie();
 }
 

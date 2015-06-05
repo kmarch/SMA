@@ -26,9 +26,11 @@ public class ElementIHM extends JPanel implements MouseListener {
 	private boolean estNid;
 	private boolean estBoite;
 	private Integer num;
-
+	private Element element;
+	
 	public ElementIHM() {
 		super();
+		addMouseListener(this);
 		setVisible(true);
 	}
 
@@ -46,6 +48,7 @@ public class ElementIHM extends JPanel implements MouseListener {
 	}
 
 	public void configure(Element element, int size) {
+		this.element=element;
 		this.couleurActuelle = element.getCouleur();
 		setSize(size, size);
 		if (element.isBoite()) {
@@ -127,6 +130,7 @@ public class ElementIHM extends JPanel implements MouseListener {
 	}
 
 	public void configureEmpty(int size) {
+		this.element=element;
 		estNid = false;
 		estBoite = false;
 		estTerminator = false;
@@ -157,8 +161,11 @@ public class ElementIHM extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(num!=null) {
+		if(element!= null && !element.isBoite() && !element.isNid()) {
+
 			
+			Thread t = new Thread(new TerminatorIHM((ITerminator) element));
+			t.start();
 		}
 	}
 
