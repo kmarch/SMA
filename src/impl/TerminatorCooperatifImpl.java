@@ -25,6 +25,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 			private List<ArrayList<Element>> liste;
 			private Element boite;
 			private ILogger logger;
+			private boolean contournement=false;
 
 			@Override
 			public void run() {
@@ -41,16 +42,11 @@ public class TerminatorCooperatifImpl extends Terminator {
 						ajoutDeNouveauxTerminator();
 					}
 
-					// robot de cette couleur
 					if(boitePlusProche != null){
 						int distance = distance(boitePlusProche);
-						//On considére que le cout de déplacement d'une case est de 5
-						//On regarde ici que la batterie est suffisante pour ramener la boite
 						if(batterie > 5*distance){
 							etape = 2;
-							//tant que on a pas atteint les coordonnées de la boite
 							while(((boitePlusProche.getX() != getX()) || (boitePlusProche.getY() != getY())) && etape == 2){
-								//On regarde que la boite est toujours la
 								if(liste.get(boitePlusProche.getX()).get(boitePlusProche.getY()) != null){
 									deplacement(boitePlusProche);
 									if(batterie < 5){
@@ -62,7 +58,6 @@ public class TerminatorCooperatifImpl extends Terminator {
 									try {
 										Thread.sleep(1000);
 									} catch (InterruptedException e) {
-										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
 								}
@@ -72,8 +67,6 @@ public class TerminatorCooperatifImpl extends Terminator {
 								}
 								
 							}
-							logger.logPriseBoite(num, boitePlusProche);
-							//On a atteint la boite il faut la ramener au nid correspondant
 							Element nid = nidCorrespondant(boitePlusProche,listeNids());
 							while(!aCoteNid(nid) && etape == 2){
 									deplacement(nid);
@@ -112,7 +105,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 								etape = 0;
 							}
 							try {
-								Thread.sleep(1000);
+								Thread.sleep(500);
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -344,97 +337,185 @@ public class TerminatorCooperatifImpl extends Terminator {
 
 			}
 
-			// Deplace le robot
 			public void deplacement(Element boite) {
 				// boite en bas à droite par rapport au robot
 				if ((boite.getX() > getX()) && (boite.getY() > getY())) {
 					// deplace vers la droite
-					if (liste.get(getX() + 1).get(getY()) == null) {
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX() + 1).set(getY(), e);
-						liste.get(getX()).set(getY(), null);
-						x++;
-						batterie = batterie - 5;
-					}
-					// deplace vers le bas
-					else if (liste.get(getX()).get(getY() + 1) == null) {
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX()).set(getY() + 1, e);
-						liste.get(getX()).set(getY(), null);
-						y++;
-						batterie = batterie - 5;
+					if(!contournement){
+						if (liste.get(getX() + 1).get(getY()) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX() + 1).set(getY(), e);
+							liste.get(getX()).set(getY(), null);
+							x++;
+							batterie = batterie - 5;
+						}
+						// deplace vers le bas
+						else if (liste.get(getX()).get(getY() + 1) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() + 1, e);
+							liste.get(getX()).set(getY(), null);
+							y++;
+							batterie = batterie - 5;
+						}
+						else{
+							batterie--;
+						}
 					}
 					else{
-						batterie--;
+						if (liste.get(getX()).get(getY() + 1) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() + 1, e);
+							liste.get(getX()).set(getY(), null);
+							y++;
+							batterie = batterie - 5;
+						}
+						else if (liste.get(getX() + 1).get(getY()) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX() + 1).set(getY(), e);
+							liste.get(getX()).set(getY(), null);
+							x++;
+							batterie = batterie - 5;
+						}
+						// deplace vers le bas
+						else{
+							batterie--;
+						}
 					}
 				}
 
 				// boite en haut à droite par rapport au robot
 				else if ((boite.getX() > getX()) && (boite.getY() < getY())) {
 					// deplace vers la droite
-					if (liste.get(getX() + 1).get(getY()) == null) {
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX() + 1).set(getY(), e);
-						liste.get(getX()).set(getY(), null);
-						x++;
-						batterie = batterie - 5;
-					}
-					// deplace vers le haut
-					else if (liste.get(getX()).get(getY() - 1) == null) {
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX()).set(getY() - 1, e);
-						liste.get(getX()).set(getY(), null);
-						y--;
-						batterie = batterie - 5;
+					if(!contournement){
+						if (liste.get(getX() + 1).get(getY()) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX() + 1).set(getY(), e);
+							liste.get(getX()).set(getY(), null);
+							x++;
+							batterie = batterie - 5;
+						}
+						// deplace vers le haut
+						else if (liste.get(getX()).get(getY() - 1) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() - 1, e);
+							liste.get(getX()).set(getY(), null);
+							y--;
+							batterie = batterie - 5;
+						}
+						else{
+							batterie--;
+						}
 					}
 					else{
-						batterie--;
+						if (liste.get(getX()).get(getY() - 1) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() - 1, e);
+							liste.get(getX()).set(getY(), null);
+							y--;
+							batterie = batterie - 5;
+						}
+						else if (liste.get(getX() + 1).get(getY()) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX() + 1).set(getY(), e);
+							liste.get(getX()).set(getY(), null);
+							x++;
+							batterie = batterie - 5;
+						}
+						// deplace vers le haut
+						
+						else{
+							batterie--;
+						}
 					}
 				}
 
 				// boite en bas à gauche par rapport au robot
 				else if ((boite.getX() < getX()) && (boite.getY() > getY())) {
 					// deplace vers la gauche
-					if (liste.get(getX() - 1).get(getY()) == null) {
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX() - 1).set(getY(), e);
-						liste.get(getX()).set(getY(), null);
-						x--;
-						batterie = batterie - 5;
-					}
-					// deplace vers le bas
-					else if (liste.get(getX()).get(getY() + 1) == null) {
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX()).set(getY() + 1, e);
-						liste.get(getX()).set(getY(), null);
-						y++;
-						batterie = batterie - 5;
+					if(!contournement){
+						if (liste.get(getX() - 1).get(getY()) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX() - 1).set(getY(), e);
+							liste.get(getX()).set(getY(), null);
+							x--;
+							batterie = batterie - 5;
+						}
+						// deplace vers le bas
+						else if (liste.get(getX()).get(getY() + 1) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() + 1, e);
+							liste.get(getX()).set(getY(), null);
+							y++;
+							batterie = batterie - 5;
+						}
+						else{
+							batterie--;
+						}
 					}
 					else{
-						batterie--;
+						if (liste.get(getX()).get(getY() + 1) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() + 1, e);
+							liste.get(getX()).set(getY(), null);
+							y++;
+							batterie = batterie - 5;
+						}
+						else if (liste.get(getX() - 1).get(getY()) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX() - 1).set(getY(), e);
+							liste.get(getX()).set(getY(), null);
+							x--;
+							batterie = batterie - 5;
+						}
+						// deplace vers le bas
+						
+						else{
+							batterie--;
+						}
 					}
 				}
 
 				// boite en haut à gauche par rapport au robot
 				else if ((boite.getX() < getX()) && (boite.getY() < getY())) {
 					// deplace vers la gauche
-					if (liste.get(getX() - 1).get(getY()) == null) {
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX() - 1).set(getY(), e);
-						liste.get(getX()).set(getY(), null);
-						x--;
-						batterie = batterie - 5;
-					}
-					// deplace vers le haut
-					else if (liste.get(getX()).get(getY() - 1) == null) {
-						Element e = liste.get(getX()).get(getY());
-						liste.get(getX()).set(getY() - 1, e);
-						liste.get(getX()).set(getY(), null);
-						y--;
-						batterie = batterie - 5;
+					if(!contournement){
+						if (liste.get(getX() - 1).get(getY()) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX() - 1).set(getY(), e);
+							liste.get(getX()).set(getY(), null);
+							x--;
+							batterie = batterie - 5;
+						}
+						// deplace vers le haut
+						else if (liste.get(getX()).get(getY() - 1) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() - 1, e);
+							liste.get(getX()).set(getY(), null);
+							y--;
+							batterie = batterie - 5;
+						}
+						else{
+							batterie--;
+						}
 					}
 					else{
-						batterie--;
+						if (liste.get(getX()).get(getY() - 1) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() - 1, e);
+							liste.get(getX()).set(getY(), null);
+							y--;
+							batterie = batterie - 5;
+						}
+						else if (liste.get(getX() - 1).get(getY()) == null) {
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX() - 1).set(getY(), e);
+							liste.get(getX()).set(getY(), null);
+							x--;
+							batterie = batterie - 5;
+						}
+						else{
+							batterie--;
+						}
 					}
 				}
 				// boite en dessous
@@ -455,10 +536,11 @@ public class TerminatorCooperatifImpl extends Terminator {
 						liste.get(getX()).set(getY(), null);
 						y++;
 						batterie = batterie - 5;
+						logger.logPriseBoite(num, boite);
 						}
 					}
 					else{
-						batterie--;
+						contournementHautBas(boite);
 					}
 					
 				}
@@ -481,10 +563,11 @@ public class TerminatorCooperatifImpl extends Terminator {
 							liste.get(getX()).set(getY(), null);
 							y--;
 							batterie = batterie - 5;
+							logger.logPriseBoite(num, boite);
 						}
 					}
 					else{
-						batterie--;
+						contournementHautBas(boite);
 					}
 				}
 
@@ -506,10 +589,11 @@ public class TerminatorCooperatifImpl extends Terminator {
 						liste.get(getX()).set(getY(), null);
 						x--;
 						batterie = batterie - 5;
+						logger.logPriseBoite(num, boite);
 						}
 					}
 					else{
-						batterie--;
+						contournementGaucheDroite(boite);
 					}
 				}
 
@@ -531,14 +615,58 @@ public class TerminatorCooperatifImpl extends Terminator {
 						liste.get(getX()).set(getY(), null);
 						x++;
 						batterie = batterie - 5;
+						logger.logPriseBoite(num, boite);
 					}
 					}
 					else{
-						batterie--;
+						contournementGaucheDroite(boite);
 					}
 					
 				}
 				logger.logDeplacement(num, x, y);
+			}
+						
+			public void contournementGaucheDroite(Element boite){
+					if(((y!=liste.size()-1) && liste.get(getX()).get(getY() +1) == null) ){
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()).set(getY() + 1, e);
+							liste.get(getX()).set(getY(), null);
+							y++;
+							batterie = batterie - 5;	
+						}
+					else if((y!=0) && (liste.get(getX()).get(getY() -1) == null)){
+						Element e = liste.get(getX()).get(getY());
+						liste.get(getX()).set(getY() - 1, e);
+						liste.get(getX()).set(getY(), null);
+						y--;
+						batterie = batterie - 5;	
+					}
+					else{
+						batterie--;
+					}
+			}
+			
+			public void contournementHautBas(Element boite){
+					if((x!=liste.size()-1) && (liste.get(getX()+1).get(getY()) == null)){
+							Element e = liste.get(getX()).get(getY());
+							liste.get(getX()+1).set(getY(), e);
+							liste.get(getX()).set(getY(), null);
+							x++;
+							batterie = batterie - 5;
+							contournement = !contournement;
+						}
+					else if((x!=0) && (liste.get(getX() - 1).get(getY()) == null)){
+						Element e = liste.get(getX()).get(getY());
+						liste.get(getX()-1).set(getY(), e);
+						liste.get(getX()).set(getY(), null);
+						x--;
+						batterie = batterie - 5;
+						contournement = !contournement;
+					}
+					else{
+						batterie--;
+					}
+				
 			}
 
 			// Permet de savoir si on est à coté du nid
