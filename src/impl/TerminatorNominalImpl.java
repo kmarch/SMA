@@ -111,7 +111,7 @@ public class TerminatorNominalImpl extends Terminator {
 			
 			@Override
 			public ITerminator intialisation(ILogger logger, int num, Couleur couleur, int x, int y,
-					List<ArrayList<Element>> listePion, int batterie,Element boite) {
+					List<ArrayList<Element>> listePion, int batterie) {
 				this.num = num;
 				this.couleur = couleur;
 				this.x = x;
@@ -120,14 +120,13 @@ public class TerminatorNominalImpl extends Terminator {
 				this.batterie = batterie;
 				this.maxBatterie = batterie;
 				this.logger = logger;
-				this.boite=boite;
 				return this;
 			}
 
 			@Override
-			public ITerminator fabrique(ILogger logger, int num, Couleur couleur, int i, int j, List<ArrayList<Element>> liste, int batterie,Element boite){
+			public ITerminator fabrique(ILogger logger, int num, Couleur couleur, int i, int j, List<ArrayList<Element>> liste, int batterie){
 				Terminator.Component systeme = (new  TerminatorNominalImpl()).newComponent();
-				return systeme.manage().intialisation(logger, num, couleur, i, j, liste, batterie, boite);
+				return systeme.manage().intialisation(logger, num, couleur, i, j, liste, batterie);
 
 			}
 

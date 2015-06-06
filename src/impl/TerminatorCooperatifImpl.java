@@ -50,6 +50,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 							etape = 2;
 							//tant que on a pas atteint les coordonnées de la boite
 							while((boitePlusProche.getX() != getX()) || (boitePlusProche.getY() != getY()) && etape == 2){
+								
 								//On regarde que la boite est toujours la
 								if(liste.get(boitePlusProche.getX()).get(boitePlusProche.getY()) != null){
 									deplacement(boitePlusProche);
@@ -167,25 +168,25 @@ public class TerminatorCooperatifImpl extends Terminator {
 			private int creationRobotParCouleur(int dernierId, Couleur couleur) {
 				ITerminator t800;
 				if ((x + 1) < liste.size() && liste.get(x + 1).get(y) == null) {
-					t800 = fabrique(logger, dernierId, couleur, x + 1, y, liste, maxBatterie,null);
+					t800 = fabrique(logger, dernierId, couleur, x + 1, y, liste, maxBatterie);
 					liste.get(x + 1).set(y, t800);
 					t800.run();
 					logger.logCreeRobot(num, couleur);
 					return dernierId++;
 				} else if (x > 0 && liste.get(x - 1).get(y) == null) {
-					t800 = fabrique(logger, dernierId, couleur, x - 1, y, liste, maxBatterie,null);
+					t800 = fabrique(logger, dernierId, couleur, x - 1, y, liste, maxBatterie);
 					liste.get(x - 1).set(y, t800);
 					logger.logCreeRobot(num, couleur);
 					t800.run();
 					return dernierId++;
 				} else if ((y + 1) < liste.size() && liste.get(x).get(y + 1) == null) {
-					t800 = fabrique(logger, dernierId, couleur, x, y  + 1, liste, maxBatterie,null);
+					t800 = fabrique(logger, dernierId, couleur, x, y  + 1, liste, maxBatterie);
 					liste.get(x).set(y + 1, t800);
 					logger.logCreeRobot(num, couleur);
 					t800.run();
 					return dernierId++;
 				} else if (y > 0 && liste.get(x).get(y - 1) == null) {
-					t800 = fabrique(logger, dernierId, couleur, x, y - 1, liste, maxBatterie,null);
+					t800 = fabrique(logger, dernierId, couleur, x, y - 1, liste, maxBatterie);
 					liste.get(x).set(y - 1, t800);
 					logger.logCreeRobot(num, couleur);
 					t800.run();
@@ -197,7 +198,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 			@Override
 			public ITerminator intialisation(ILogger logger, int num,
 					Couleur couleur, int x, int y,
-					List<ArrayList<Element>> listePion, int batterie, Element boite) {
+					List<ArrayList<Element>> listePion, int batterie) {
 				this.num = num;
 				this.couleur = couleur;
 				this.x = x;
@@ -206,18 +207,17 @@ public class TerminatorCooperatifImpl extends Terminator {
 				this.batterie = batterie;
 				this.maxBatterie = batterie;
 				this.logger = logger;
-				this.boite = boite;
 				return this;
 			}
 
 			@Override
 			public ITerminator fabrique(ILogger logger, int num,
 					Couleur couleur, int i, int j,
-					List<ArrayList<Element>> liste, int batterie, Element element) {
+					List<ArrayList<Element>> liste, int batterie) {
 				Terminator.Component systeme = (new TerminatorCooperatifImpl())
 						.newComponent();
 				return systeme.manage().intialisation(logger, num, couleur, i,
-						j, liste, batterie, element);
+						j, liste, batterie);
 
 			}
 
@@ -589,11 +589,6 @@ public class TerminatorCooperatifImpl extends Terminator {
 
 			public int getBatterie() {
 				return batterie;
-			}
-
-			public void setBatterie(int batterie) {
-				this.batterie = batterie;
-
 			}
 
 			@Override
