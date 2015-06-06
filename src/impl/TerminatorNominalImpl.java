@@ -49,10 +49,26 @@ public class TerminatorNominalImpl extends Terminator {
 									liste.get(getX()).set(getY(),null); 
 									etape = 0;
 								}
-								try {
-									Thread.sleep(1000);
-								} catch (InterruptedException e) {
-									e.printStackTrace();
+								else if(batterie> ((2*batterie)/3)){
+									try {
+										Thread.sleep(1000);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
+								}
+								else if((batterie <= ((2*batterie)/3)) && (batterie > ((1*batterie)/3))){
+									try {
+										Thread.sleep(2000);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
+								}
+								else{
+									try {
+										Thread.sleep(3333);
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									}
 								}
 							}
 
@@ -72,11 +88,28 @@ public class TerminatorNominalImpl extends Terminator {
 								liste.get(getX()).set(getY(),null); 
 								etape = 0;
 							}
-							try {
-								Thread.sleep(1000);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
+							else if(batterie> ((2*batterie)/3)){
+								try {
+									Thread.sleep(1000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 							}
+							else if((batterie <= ((2*batterie)/3)) && (batterie > ((1*batterie)/3))){
+								try {
+									Thread.sleep(2000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
+							else{
+								try {
+									Thread.sleep(3333);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
+							}
+							
 					}
 					if(aCoteNid(nid)){
 						logger.logPoseBoite(num, boitePlusProche, nid);

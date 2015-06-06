@@ -54,11 +54,26 @@ public class TerminatorCooperatifImpl extends Terminator {
 										liste.get(getX()).set(getY(),null); 
 										etape = 0;
 									}
-									
-									try {
-										Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										e.printStackTrace();
+									else if(batterie> ((2*batterie)/3)){
+										try {
+											Thread.sleep(1000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									}
+									else if((batterie <= ((2*batterie)/3)) && (batterie > ((1*batterie)/3))){
+										try {
+											Thread.sleep(2000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									}
+									else{
+										try {
+											Thread.sleep(3333);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
 									}
 								}
 								//gérer la cas ou la boite n'est plus là
@@ -75,11 +90,26 @@ public class TerminatorCooperatifImpl extends Terminator {
 										liste.get(getX()).set(getY(),null); 
 										etape = 0;
 									}
-									try {
-										Thread.sleep(1000);
-									} catch (InterruptedException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
+									else if(batterie> ((2*batterie)/3)){
+										try {
+											Thread.sleep(1000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									}
+									else if((batterie <= ((2*batterie)/3)) && (batterie > ((1*batterie)/3))){
+										try {
+											Thread.sleep(2000);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
+									}
+									else{
+										try {
+											Thread.sleep(3333);
+										} catch (InterruptedException e) {
+											e.printStackTrace();
+										}
 									}
 							}
 							if(aCoteNid(nid)){
