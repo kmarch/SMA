@@ -44,10 +44,10 @@ public class SystemImpl extends Systeme {
 				
 				initNids(properties);
 				
-				generationBoites(taille);
+				generationBoites(taille, properties);
 			}
 
-			private void generationBoites(int taille) {
+			private void generationBoites(int taille, Properties propriete) {
 				int boiteX = 0, boiteY = 0;
 				Couleur nouvelleCouleur;
 				Couleur [] tabCouleur = {Couleur.BLEU, Couleur.ROUGE, Couleur.VERT};
@@ -67,7 +67,7 @@ public class SystemImpl extends Systeme {
 					System.out.println("Ajout d'une boite au coord " + boiteX + " " + boiteY + " " + nouvelleCouleur);
 					liste.get(boiteX).set(boiteY, new BoiteImpl(nouvelleCouleur,boiteX,boiteY,false));
 					try {
-						Thread.sleep(5000);
+						Thread.sleep(Integer.parseInt(propriete.getProperty("tempsBoites")));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
