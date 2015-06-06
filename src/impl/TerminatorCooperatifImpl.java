@@ -47,7 +47,6 @@ public class TerminatorCooperatifImpl extends Terminator {
 						if(batterie > 5*distance){
 							etape = 2;
 							while(((boitePlusProche.getX() != getX()) || (boitePlusProche.getY() != getY())) && etape == 2){
-								if(liste.get(boitePlusProche.getX()).get(boitePlusProche.getY()) != null){
 									deplacement(boitePlusProche);
 									if(batterie < 5){
 										System.out.println("Plus de batterie");
@@ -75,12 +74,6 @@ public class TerminatorCooperatifImpl extends Terminator {
 											e.printStackTrace();
 										}
 									}
-								}
-								//gérer la cas ou la boite n'est plus là
-								else{
-									etape = 1;
-								}
-								
 							}
 							Element nid = nidCorrespondant(boitePlusProche,listeNids());
 							while(!aCoteNid(nid) && etape == 2){
