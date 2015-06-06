@@ -33,7 +33,7 @@ public class LoggerImpl extends Logger{
 				try {
 		            File lFile = new File(numRobot + ".log");
 		            FileWriter lWriter = new FileWriter(lFile, true);
-		            lWriter.write("Prise de la boite de couleur "  + boite.getCouleur().toString());
+		            lWriter.write("Prise de la boite de couleur "  + boite.getCouleur().toString() + "\n");
 		            lWriter.close();
 		        } catch (IOException lEx) {
 		            lEx.printStackTrace();
@@ -46,7 +46,7 @@ public class LoggerImpl extends Logger{
 		            File lFile = new File(numRobot + ".log");
 		            FileWriter lWriter = new FileWriter(lFile, true);
 		            lWriter.write("Pose de la boite de couleur "  + boite.getCouleur().toString() + 
-		            		" dans le nid " + nid.getCouleur().toString());
+		            		" dans le nid " + nid.getCouleur().toString()  + "\n");
 		            lWriter.close();
 		        } catch (IOException lEx) {
 		            lEx.printStackTrace();
@@ -59,7 +59,7 @@ public class LoggerImpl extends Logger{
 					System.out.println("Créé un robot de couleur: " + couleur);
 		            File lFile = new File(numRobot + ".log");
 		            FileWriter lWriter = new FileWriter(lFile, true);
-		            lWriter.write("Créé un robot de couleur :" + couleur);
+		            lWriter.write("Créé un robot de couleur :" + couleur  + "\n");
 		            lWriter.close();
 		        } catch (IOException lEx) {
 		            lEx.printStackTrace();
