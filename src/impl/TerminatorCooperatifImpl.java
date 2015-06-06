@@ -49,12 +49,11 @@ public class TerminatorCooperatifImpl extends Terminator {
 						if(batterie > 5*distance){
 							etape = 2;
 							//tant que on a pas atteint les coordonnées de la boite
-							while((boitePlusProche.getX() != getX()) || (boitePlusProche.getY() != getY()) && etape == 2){
-								
+							while(((boitePlusProche.getX() != getX()) || (boitePlusProche.getY() != getY())) && etape == 2){
 								//On regarde que la boite est toujours la
 								if(liste.get(boitePlusProche.getX()).get(boitePlusProche.getY()) != null){
 									deplacement(boitePlusProche);
-									if(batterie == 0){
+									if(batterie < 5){
 										System.out.println("Plus de batterie");
 										liste.get(getX()).set(getY(),null); 
 										etape = 0;
@@ -78,7 +77,7 @@ public class TerminatorCooperatifImpl extends Terminator {
 							Element nid = nidCorrespondant(boitePlusProche,listeNids());
 							while(!aCoteNid(nid) && etape == 2){
 									deplacement(nid);
-									if(batterie == 0){
+									if(batterie < 5){
 										System.out.println("Plus de batterie");
 										liste.get(getX()).set(getY(),null); 
 										etape = 0;
@@ -111,6 +110,12 @@ public class TerminatorCooperatifImpl extends Terminator {
 								System.out.println("Plus de batterie");
 								liste.get(getX()).set(getY(),null); 
 								etape = 0;
+							}
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
 						}
 					}
